@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Chỉnh sửa người dùng</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Liên kết tới file CSS -->
+</head>
+<body>
+
+<h2>📝 Chỉnh sửa thông tin người dùng</h2>
+
+<form th:action="@{'/users/update/' + ${user.id}}" th:object="${user}" method="post">
+    <label>👤 Tên người dùng:</label>
+    <input type="text" th:field="*{username}" required />
+    <br/>
+
+    <label>🎂 Tuổi:</label>
+    <input type="number" th:field="*{age}" />
+    <br/>
+
+    <label>📅 Ngày sinh:</label>
+    <input type="date" th:field="*{dob}" />
+    <br/>
+
+    <button type="submit">✅ Cập nhật</button>
+</form>
+
+<a th:href="@{/users}">⬅️ Quay lại danh sách</a>
+
+</body>
+</html>

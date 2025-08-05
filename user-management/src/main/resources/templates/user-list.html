@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+    <link rel="stylesheet" th:href="@{/css/user-style.css}" />
+</head>
+<body>
+
+<!-- ✅ Hiển thị thông báo -->
+<div th:if="${message}" class="alert" id="alertBox" th:text="${message}"></div>
+
+<h2>User Management</h2>
+
+<!-- ✅ Nút tạo mới -->
+<div class="top-actions">
+    <a th:href="@{/users/create}" class="button">➕ Create New User</a>
+</div>
+
+<!-- 🔍 Form tìm kiếm -->
+<div class="top-actions">
+    <div class="form-actions">
+        <form th:action="@{/users}" method="get">
+            <input type="text" name="keyword" placeholder="🔍 Tìm theo username..." th:value="${keyword}" />
+            <input type="hidden" name="size" th:value="${size}" />
+            <button type="submit" class="button">🔍 Tìm</button>
+        </form>
+    </div>
+</div>
+
+
+<!--Thông báo nếu search rỗng-->
+<tr th:if="${empty}">
+    <td colspan="5">🔍 No users found for your search.</td>
+</tr>
+
+
+<!-- ✅ Bảng user -->
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Age</th>
+        <th>Date of Birth</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td th:text="${user.username}">John</td>
+        <td th:text="${user.age}">25</td>
+        <td th:text="${#temporals.format(user.dob, 'dd-MM-yyyy')}">01-01-2000</td>
+        <td>
+            <a th:href="@{'/users/edit/' + ${user.id}}" class="button edit-btn">✏️ Edit</a>
+            <form th:action="@{'/users/delete/' + ${user.id}}" method="post" style="display:inline;">
+                <button type="submit" class="delete-btn">🗑 Delete</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- ✅ Phân trang chỉ hiển thị nếu có dữ liệu -->
+<div class="pagination" th:if="${totalPages > 0}">
+    <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+        <a th:href="@{/users(page=${i}, size=${size}, keyword=${keyword})}"
+           th:text="${i + 1}"
+           th:classappend="${i == currentPage} ? 'active-page' : ''"></a>
+    </span>
+</div>
+
+<!-- ✅ Script ẩn thông báo sau 3 giây -->
+<script>
+    setTimeout(() => {
+        const alertBox = document.getElementById("alertBox");
+        if (alertBox) {
+            alertBox.classList.add("hide");
+        }
+    }, 3000);
+</script>
+
+</body>
+</html>

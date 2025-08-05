@@ -1,0 +1,196 @@
+/* ✅ Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ✅ Body */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f0f2f5, #e0eafc);
+    padding: 40px;
+}
+
+/* ✅ Title */
+h2 {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #2c3e50;
+    animation: fadeIn 1s ease-out;
+}
+
+/* ✅ Alert Box */
+.alert {
+    background-color: #d1f3d1;
+    color: #216c2a;
+    border-left: 5px solid #28a745;
+    padding: 15px 20px;
+    border-radius: 8px;
+    width: 60%;
+    margin: 0 auto 20px auto;
+    font-weight: bold;
+    animation: fadeSlideDown 0.6s ease-out;
+    transition: opacity 1s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.alert.hide {
+    opacity: 0;
+    transition: opacity 0.5s ease-out;
+}
+
+@keyframes fadeSlideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ✅ Actions Container */
+.top-actions {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+/* ✅ Form Search */
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+input[type="text"] {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    width: 240px;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+}
+
+/* ✅ Buttons */
+.button, button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s, transform 0.2s;
+    text-decoration: none;
+}
+
+.button:hover, button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+
+.edit-btn {
+    background-color: #17a2b8;
+}
+
+.edit-btn:hover {
+    background-color: #138496;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* ✅ Table Styling */
+table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+th, td {
+    padding: 14px 18px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+input[type="text"] {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: 0.3s;
+    width: 240px;
+    font-weight: bold; /* ✅ Thêm dòng này để in đậm */
+}
+
+tbody tr:hover {
+    background-color: #f2f2f2;
+    transition: 0.3s;
+}
+
+/* ✅ Pagination */
+.pagination {
+    text-align: center;
+    margin-top: 25px;
+}
+
+.pagination a {
+    margin: 0 5px;
+    padding: 8px 12px;
+    border-radius: 5px;
+    background-color: #e0e0e0;
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.pagination a.active-page {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.pagination a:hover {
+    background-color: #9ae6b4;
+}
+
+/* ✅ Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
