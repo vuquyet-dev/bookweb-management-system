@@ -12,11 +12,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
-    @Query("SELECT b FROM Book b WHERE " +
+    @Query("SELECT DISTINCT b FROM Book b LEFT JOIN b.categories c WHERE " +
             "LOWER(b.title) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(b.authors) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(b.publisher) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
             "LOWER(b.printType) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
-            "LOWER(b.description) LIKE LOWER(CONCAT('%', :keyword, '%'))")
+            "LOWER(b.description) LIKE LOWER(CONCAT('%', :keyword, '%')) OR " +
+            "LOWER(c.name) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<Book> search(@Param("keyword") String keyword, Pageable pageable);
 }
