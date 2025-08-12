@@ -2,12 +2,14 @@ package com.example.bookweb_management.service.Impl;
 
 import com.example.bookweb_management.dto.UserDTO;
 import com.example.bookweb_management.entity.User;
+import com.example.bookweb_management.exception.ContainSpaceException;
 import com.example.bookweb_management.exception.DuplicateIdentityNumberException;
 import com.example.bookweb_management.exception.DuplicateUsernameException;
 import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.mapper.UserMapper;
 import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.UserService;
+import com.example.bookweb_management.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
@@ -36,6 +38,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO createUser(UserDTO dto) {
+
+        //check username space
+        if(UserUtils.containWhiteSpace(dto.getUsername()))
+        {
+            throw new ContainSpaceException("Username must be not contain space");
+        }
+        dto.setUsername(UserUtils.normalizeUsername(dto.getUsername()));
+        dto.setPassword(UserUtils.normalizeUsername(dto.getPassword()));
+        dto.setFullname(UserUtils.normalizeUsername(dto.getFullname()));
+        dto.setPhoneNumber(UserUtils.normalizeUsername(dto.getPhoneNumber()));
+        dto.setIdentityNumber(UserUtils.normalizeUsername(dto.getIdentityNumber()));
+        dto.setAddress(UserUtils.normalizeUsername(dto.getAddress()));
+
         //Check username trùng
         if(userRepository.existsByUsername(dto.getUsername()))
         {

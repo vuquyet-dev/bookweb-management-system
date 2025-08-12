@@ -11,6 +11,12 @@ public class UserUtils {
     }
 
     //xử lý password: trim
+    public static String normalizePassword(String password) {
+        if (password == null) return null;
+        return password.trim();
+    }
+
+    //xử lý full name: trim
     public static String normalizeFullname(String fullname)
     {
         if(fullname == null) return null;
@@ -36,5 +42,11 @@ public class UserUtils {
     {
         if(address == null) return null;
         return address.trim();
+    }
+
+    //check username contain space
+    public static boolean containWhiteSpace(String username)
+    {
+        return username != null && username.matches(".*\\s+.*");
     }
 }
