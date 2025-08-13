@@ -1,11 +1,10 @@
 package com.example.bookweb_management.mapper;
 
-import com.example.bookweb_management.dto.UserCreateDTO;
-import com.example.bookweb_management.dto.UserResponseDTO;
-import com.example.bookweb_management.dto.UserUpdateDTO;
+import com.example.bookweb_management.dto.userdto.UserCreateDTO;
+import com.example.bookweb_management.dto.userdto.UserResponseDTO;
+import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import com.example.bookweb_management.entity.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package com.example.bookweb_management.utils;
 
-import com.example.bookweb_management.dto.UserCreateDTO;
+import com.example.bookweb_management.dto.userdto.UserCreateDTO;
 
 public class UserUtils {
     private UserUtils() {}

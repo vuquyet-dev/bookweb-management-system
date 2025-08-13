@@ -1,4 +1,4 @@
-package com.example.bookweb_management.dto;
+package com.example.bookweb_management.dto.userdto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

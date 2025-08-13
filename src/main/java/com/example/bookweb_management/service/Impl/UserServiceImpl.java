@@ -1,17 +1,15 @@
 package com.example.bookweb_management.service.Impl;
 
-import com.example.bookweb_management.dto.UserCreateDTO;
-import com.example.bookweb_management.dto.UserResponseDTO;
-import com.example.bookweb_management.dto.UserUpdateDTO;
+import com.example.bookweb_management.dto.userdto.UserCreateDTO;
+import com.example.bookweb_management.dto.userdto.UserResponseDTO;
+import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import com.example.bookweb_management.entity.User;
-import com.example.bookweb_management.exception.ContainSpaceException;
-import com.example.bookweb_management.exception.DuplicateIdentityNumberException;
-import com.example.bookweb_management.exception.DuplicateUsernameException;
+import com.example.bookweb_management.exception.user_exception.DuplicateIdentityNumberException;
+import com.example.bookweb_management.exception.user_exception.DuplicateUsernameException;
 import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.mapper.UserMapper;
 import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.UserService;
-import com.example.bookweb_management.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;

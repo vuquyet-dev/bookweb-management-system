@@ -1,8 +1,8 @@
 package com.example.bookweb_management.controller;
 
-import com.example.bookweb_management.dto.UserCreateDTO;
-import com.example.bookweb_management.dto.UserResponseDTO;
-import com.example.bookweb_management.dto.UserUpdateDTO;
+import com.example.bookweb_management.dto.userdto.UserCreateDTO;
+import com.example.bookweb_management.dto.userdto.UserResponseDTO;
+import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import com.example.bookweb_management.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
