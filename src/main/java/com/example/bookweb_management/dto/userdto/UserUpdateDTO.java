@@ -1,4 +1,4 @@
-package com.example.bookweb_management.dto;
+package com.example.bookweb_management.dto.userdto;
 
 import com.example.bookweb_management.constant.UserConstants;
 import jakarta.validation.constraints.*;

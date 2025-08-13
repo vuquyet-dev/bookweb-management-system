@@ -1,8 +1,8 @@
 package com.example.bookweb_management.service;
 
-import com.example.bookweb_management.dto.UserCreateDTO;
-import com.example.bookweb_management.dto.UserResponseDTO;
-import com.example.bookweb_management.dto.UserUpdateDTO;
+import com.example.bookweb_management.dto.userdto.UserCreateDTO;
+import com.example.bookweb_management.dto.userdto.UserResponseDTO;
+import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
