@@ -1,5 +1,7 @@
 package com.example.bookweb_management.utils;
 
+import com.example.bookweb_management.dto.UserCreateDTO;
+
 public class UserUtils {
     private UserUtils() {}
 
@@ -48,5 +50,18 @@ public class UserUtils {
     public static boolean containWhiteSpace(String username)
     {
         return username != null && username.matches(".*\\s+.*");
+    }
+
+    //sửa dữ liệu đầu vào
+    public static UserCreateDTO normalizeUserFields(UserCreateDTO dto)
+    {
+        dto.setUsername(UserUtils.normalizeUsername(dto.getUsername()));
+        dto.setPassword(UserUtils.normalizeUsername(dto.getPassword()));
+        dto.setFullname(UserUtils.normalizeUsername(dto.getFullname()));
+        dto.setPhoneNumber(UserUtils.normalizeUsername(dto.getPhoneNumber()));
+        dto.setIdentityNumber(UserUtils.normalizeUsername(dto.getIdentityNumber()));
+        dto.setAddress(UserUtils.normalizeUsername(dto.getAddress()));
+
+        return dto;
     }
 }

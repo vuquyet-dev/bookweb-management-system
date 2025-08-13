@@ -1,6 +1,8 @@
 package com.example.bookweb_management.service.Impl;
 
-import com.example.bookweb_management.dto.UserDTO;
+import com.example.bookweb_management.dto.UserCreateDTO;
+import com.example.bookweb_management.dto.UserResponseDTO;
+import com.example.bookweb_management.dto.UserUpdateDTO;
 import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.exception.ContainSpaceException;
 import com.example.bookweb_management.exception.DuplicateIdentityNumberException;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,49 +29,44 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        return userMapper.toDTOs(userRepository.findAll());
+    public List<UserResponseDTO> getAllUsers() {
+        return userMapper.toResponseDTOs(userRepository.findAll());
     }
 
+
     @Override
-    public UserDTO getUser(String username) {
+    public UserResponseDTO getUser(String username) {
         User user = userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + username));
-        return userMapper.toDTO(user);
+        return userMapper.toResponseDTO(user);
     }
 
     @Override
-    public UserDTO createUser(UserDTO dto) {
+    public UserResponseDTO createUser(UserCreateDTO createDTO) {
 
-        //check username space
-        if(UserUtils.containWhiteSpace(dto.getUsername()))
-        {
-            throw new ContainSpaceException("Username must be not contain space");
-        }
-        dto.setUsername(UserUtils.normalizeUsername(dto.getUsername()));
-        dto.setPassword(UserUtils.normalizeUsername(dto.getPassword()));
-        dto.setFullname(UserUtils.normalizeUsername(dto.getFullname()));
-        dto.setPhoneNumber(UserUtils.normalizeUsername(dto.getPhoneNumber()));
-        dto.setIdentityNumber(UserUtils.normalizeUsername(dto.getIdentityNumber()));
-        dto.setAddress(UserUtils.normalizeUsername(dto.getAddress()));
+        Optional<User> existingUser = userRepository
+                .findByUsernameOrIdentityNumber(createDTO.getUsername(), createDTO.getIdentityNumber());
 
-        //Check username trùng
-        if(userRepository.existsByUsername(dto.getUsername()))
-        {
-            throw new DuplicateUsernameException("Username '" + dto.getUsername() + "' already exists");
+        if (existingUser.isPresent()) {
+            if (existingUser.get().getUsername().equals(createDTO.getUsername())) {
+                throw new DuplicateUsernameException("Username '" + createDTO.getUsername() + "' already exists");
+            }
+            if (existingUser.get().getIdentityNumber().equals(createDTO.getIdentityNumber())) {
+                throw new DuplicateIdentityNumberException("Identity number '" + createDTO.getIdentityNumber() + "' already exists");
+            }
         }
 
-        if(userRepository.existsByIdentityNumber(dto.getIdentityNumber()))
+        if(userRepository.existsByIdentityNumber(createDTO.getIdentityNumber()))
         {
-            throw new DuplicateIdentityNumberException("Identity number '" + dto.getIdentityNumber() + "' already exists");
+            throw new DuplicateIdentityNumberException("Identity number '" + createDTO.getIdentityNumber() + "' already exists");
         }
 
-        User user = userMapper.toEntity(dto);
+        User user = userMapper.toEntity(createDTO);
         User saveUser = userRepository.save(user);
-        return userMapper.toDTO(saveUser);
+        return userMapper.toResponseDTO(saveUser);
     }
 
     @Override
-    public UserDTO update(String username, UserDTO dto) {
+    public UserResponseDTO update(String username, UserUpdateDTO dto) {
         User user = userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + username));
         user.setPassword(dto.getPassword());
         user.setFullname(dto.getFullname());
@@ -78,7 +76,7 @@ public class UserServiceImpl implements UserService {
         user.setBirthday(dto.getBirthday());
         user.setAddress(dto.getAddress());
         User saveUser = userRepository.save(user);
-        return userMapper.toDTO(saveUser);
+        return userMapper.toResponseDTO(saveUser);
     }
 
     @Override
@@ -87,7 +85,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<UserDTO> search(String keyword, int page, int size) {
+    public Page<UserResponseDTO> search(String keyword, int page, int size) {
         return null;
     }
 }

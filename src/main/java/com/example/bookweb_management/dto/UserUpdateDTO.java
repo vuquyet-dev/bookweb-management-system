@@ -2,16 +2,16 @@ package com.example.bookweb_management.dto;
 
 import com.example.bookweb_management.constant.UserConstants;
 import jakarta.validation.constraints.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
-
-    @NotBlank(message = UserConstants.MSG_USERNAME_BLANK)
+public class UserUpdateDTO {
     @Size(min = 4, max = 30, message = UserConstants.MSG_USERNAME_SIZE)
     @Pattern(regexp = UserConstants.USERNAME_PATTERN, message = UserConstants.MSG_USERNAME_SIZE)
     private String username;

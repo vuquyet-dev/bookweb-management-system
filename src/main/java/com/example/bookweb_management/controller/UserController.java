@@ -1,11 +1,12 @@
 package com.example.bookweb_management.controller;
 
-import com.example.bookweb_management.dto.UserDTO;
+import com.example.bookweb_management.dto.UserCreateDTO;
+import com.example.bookweb_management.dto.UserResponseDTO;
+import com.example.bookweb_management.dto.UserUpdateDTO;
 import com.example.bookweb_management.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,25 +18,25 @@ public class UserController {
     private UserService userService;
 
     @GetMapping
-    public List<UserDTO> getAllUsers()
+    public List<UserResponseDTO> getAllUsers()
     {
         return userService.getAllUsers();
     }
 
     @GetMapping("/{username}")
-    public UserDTO getUser(@PathVariable String username)
+    public UserResponseDTO getUser(@PathVariable String username)
     {
         return userService.getUser(username);
     }
 
     @PostMapping
-    public UserDTO createUser(@RequestBody UserDTO dto)
+    public UserResponseDTO createUser(@RequestBody UserCreateDTO dto)
     {
         return userService.createUser(dto);
     }
 
     @PutMapping("/{username}")
-    public UserDTO update(@PathVariable String username,@RequestBody @Valid UserDTO dto)
+    public UserResponseDTO update(@PathVariable String username,@RequestBody @Valid UserUpdateDTO dto)
     {
         return userService.update(username, dto);
     }
@@ -47,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public Page<UserDTO> search(String keyword, int page, int size)
+    public Page<UserResponseDTO> search(String keyword, int page, int size)
     {
         return userService.search(keyword, page, size);
     }

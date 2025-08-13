@@ -1,15 +1,17 @@
 package com.example.bookweb_management.service;
 
-import com.example.bookweb_management.dto.UserDTO;
+import com.example.bookweb_management.dto.UserCreateDTO;
+import com.example.bookweb_management.dto.UserResponseDTO;
+import com.example.bookweb_management.dto.UserUpdateDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public interface UserService {
-    public List<UserDTO> getAllUsers();
-    public UserDTO getUser(String username);
-    public UserDTO createUser(UserDTO dto);
-    public UserDTO update(String username, UserDTO dto);
+    public List<UserResponseDTO> getAllUsers();
+    public UserResponseDTO getUser(String username);
+    public UserResponseDTO createUser(UserCreateDTO dto);
+    public UserResponseDTO update(String username, UserUpdateDTO dto);
     public void deleteUser(String username);
-    public Page<UserDTO> search(String keyword, int page, int size);
+    public Page<UserResponseDTO> search(String keyword, int page, int size);
 }
