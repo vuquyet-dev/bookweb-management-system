@@ -1,5 +1,6 @@
 package com.example.bookweb_management.exception;
 
+import com.example.bookweb_management.exception.category_exception.DuplicateNameException;
 import com.example.bookweb_management.exception.user_exception.ContainSpaceException;
 import com.example.bookweb_management.exception.user_exception.DuplicateIdentityNumberException;
 import com.example.bookweb_management.exception.user_exception.DuplicateUsernameException;
@@ -59,6 +60,16 @@ public class GlobalExceptionHandler {
         ex.getBindingResult().getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.badRequest().body(errors);
+    }
+
+    @ExceptionHandler(DuplicateNameException.class)
+    public ResponseEntity<?> handleDuplicateName(DuplicateNameException ex)
+    {
+        Map<String, Object> body = new HashMap<>();
+        body.put("timestamp", LocalDateTime.now());
+        body.put("message", ex.getMessage());
+        body.put("status", HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
 
