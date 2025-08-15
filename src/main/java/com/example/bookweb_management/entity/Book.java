@@ -35,4 +35,14 @@ public class Book {
 
     @Column(nullable = false)
     private String description;
+
+    //n Book - 1 User
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    //n Book - 1 Category
+    @ManyToOne
+    @JoinColumn(name = "category_id", nullable = false)
+    private Category category;
 }

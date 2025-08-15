@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface UserService {
     public List<UserResponseDTO> getAllUsers();
-    public UserResponseDTO getUser(String username);
+    public UserResponseDTO getUser(Long id);
     public UserResponseDTO createUser(UserCreateDTO dto);
-    public UserResponseDTO update(String username, UserUpdateDTO dto);
-    public void deleteUser(String username);
+    public UserResponseDTO update(Long id, UserUpdateDTO dto);
+    public void deleteUser(Long id);
     public Page<UserResponseDTO> search(String keyword, int page, int size);
 }
