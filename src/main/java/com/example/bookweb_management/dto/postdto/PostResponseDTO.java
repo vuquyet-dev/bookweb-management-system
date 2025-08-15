@@ -15,4 +15,5 @@ public class PostResponseDTO {
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private Long userId;
 }
