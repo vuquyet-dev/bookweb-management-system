@@ -23,10 +23,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{username}")
-    public UserResponseDTO getUser(@PathVariable String username)
+    @GetMapping("/{id}")
+    public UserResponseDTO getUser(@PathVariable Long id)
     {
-        return userService.getUser(username);
+        return userService.getUser(id);
     }
 
     @PostMapping
@@ -35,16 +35,16 @@ public class UserController {
         return userService.createUser(dto);
     }
 
-    @PutMapping("/{username}")
-    public UserResponseDTO update(@PathVariable String username,@RequestBody @Valid UserUpdateDTO dto)
+    @PutMapping("/{id}")
+    public UserResponseDTO update(@PathVariable Long id,@RequestBody @Valid UserUpdateDTO dto)
     {
-        return userService.update(username, dto);
+        return userService.update(id, dto);
     }
 
-    @DeleteMapping("/{username}")
-    public void deleteUser(@PathVariable String username)
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id)
     {
-        userService.deleteUser(username);
+        userService.deleteUser(id);
     }
 
     @GetMapping("/search")

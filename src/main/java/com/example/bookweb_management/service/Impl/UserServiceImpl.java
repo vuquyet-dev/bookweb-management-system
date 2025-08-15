@@ -33,8 +33,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserResponseDTO getUser(String username) {
-        User user = userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + username));
+    public UserResponseDTO getUser(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + id));
         return userMapper.toResponseDTO(user);
     }
 
@@ -64,8 +64,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO update(String username, UserUpdateDTO dto) {
-        User user = userRepository.findById(username).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + username));
+    public UserResponseDTO update(Long id, UserUpdateDTO dto) {
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + id));
         user.setPassword(dto.getPassword());
         user.setFullname(dto.getFullname());
         user.setPhoneNumber(dto.getPhoneNumber());
@@ -78,8 +78,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(String username) {
-        userRepository.deleteById(username);
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
     @Override

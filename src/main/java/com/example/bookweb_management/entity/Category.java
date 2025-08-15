@@ -22,6 +22,7 @@ public class Category {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-//    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
-//    private Set<Book> books = new HashSet<>();
+    //1 Category - n Book
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Book> books = new HashSet<>();
 }
