@@ -10,7 +10,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserCreateDTO {
-
     @NotBlank(message = UserConstants.MSG_USERNAME_BLANK)
     @Size(min = 4, max = 30, message = UserConstants.MSG_USERNAME_SIZE)
     @Pattern(regexp = UserConstants.USERNAME_PATTERN, message = UserConstants.MSG_USERNAME_SIZE)

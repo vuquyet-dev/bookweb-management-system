@@ -5,20 +5,24 @@ import com.example.bookweb_management.dto.postdto.PostResponseDTO;
 import com.example.bookweb_management.dto.postdto.PostUpdateDTO;
 import com.example.bookweb_management.entity.Post;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
-    //CreateDTO to Entity
+
+    // CreateDTO -> Entity
     Post toEntity(PostCreateDTO createDTO);
 
-    //UpdateDTO to Entity
+    // UpdateDTO -> Entity
     Post toEntity(PostUpdateDTO updateDTO);
 
-    //Entity to ResponseDTO
+    // Entity -> ResponseDTO
+    @Mapping(source = "user.id", target = "userId")
     PostResponseDTO toResponseDTO(Post entity);
 
-    //List Entity to ResponseDTO
+    // List<Entity> -> List<ResponseDTO>
+    @Mapping(source = "user.id", target = "userId")//mapping id của user để khi test api get không bị null userId
     List<PostResponseDTO> toResponseDTOs(List<Post> entities);
 }
