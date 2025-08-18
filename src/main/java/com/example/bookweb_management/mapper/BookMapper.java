@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.bookdto.BookResponseDTO;
 import com.example.bookweb_management.dto.bookdto.BookUpdateDTO;
 import com.example.bookweb_management.entity.Book;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -17,8 +18,12 @@ public interface BookMapper {
     Book toEntity(BookUpdateDTO dto);
 
     //Entity -> ResponseDTO
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "category.id", target = "categoryId")
     BookResponseDTO toResponseDTO(Book entity);
 
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "category.id", target = "categoryId")
     List<BookResponseDTO> toResponseDTOs(List<Book> entities);
 
 }
