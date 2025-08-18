@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.commentdto.CommentResponseDTO;
 import com.example.bookweb_management.dto.commentdto.CommentUpdateDTO;
 import com.example.bookweb_management.entity.Comment;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -17,8 +18,12 @@ public interface CommentMapper {
     Comment toEntity(CommentUpdateDTO updateDTO);
 
     //Entity to ResponseDTO
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "post.id", target = "postId")
     CommentResponseDTO toResponseDTO(Comment entity);
 
     //List Entity to ResponseDTO
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "post.id", target = "postId")
     List<CommentResponseDTO> toResponseDTOs(List<Comment> entities);
 }

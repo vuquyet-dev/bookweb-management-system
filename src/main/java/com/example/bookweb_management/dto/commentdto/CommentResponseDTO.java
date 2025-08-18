@@ -14,4 +14,6 @@ public class CommentResponseDTO {
     private String content;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
+    private Long userId;
+    private Long postId;
 }
