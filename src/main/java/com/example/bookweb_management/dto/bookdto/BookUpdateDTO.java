@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,7 +23,7 @@ public class BookUpdateDTO {
     @Size(min = 1, max = 80, message = BookConstants.MSG_AUTHOR_SIZE)
     private String author;
 
-    @NotBlank(message = "Author " + BookConstants.MSG_NOTBLANK)
+    @NotBlank(message = "Publisher " + BookConstants.MSG_NOTBLANK)
     @Size(min = 1, max = 80, message = BookConstants.MSG_PUBLISHER_SIZE)
     private String publisher;
 
@@ -40,4 +42,11 @@ public class BookUpdateDTO {
     @NotBlank(message = "Author " + BookConstants.MSG_NOTBLANK)
     @Size(min = 1, max = 1000, message = BookConstants.MSG_DESCRIPTION_SIZE)
     private String description;
+
+    @NotNull(message = "User id must be not null")
+    private Long userId;
+
+    @NotNull(message = "Category id must be not null")
+    private List<Long> categoryIds;
+
 }

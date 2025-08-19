@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface BookService {
     public List<BookResponseDTO> getAllBooks();
-    public BookResponseDTO getBook(Long code);
+    public BookResponseDTO getBook(Long id);
     public BookResponseDTO createBook(BookCreateDTO createDTO);
-    public BookResponseDTO updateBook(Long code, BookUpdateDTO updateDTO);
-    public void deleteBook(Long code);
+    public BookResponseDTO updateBook(Long id, BookUpdateDTO updateDTO);
+    public void deleteBook(Long id);
     public Page<BookResponseDTO> search(String keyword, int page, int size);
 }
