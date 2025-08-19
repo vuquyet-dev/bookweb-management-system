@@ -9,13 +9,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.Set;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookCreateDTO {
     @NotBlank(message = "Title " + BookConstants.MSG_NOTBLANK)
     @Size(min = 1, max = 150, message = BookConstants.MSG_TITLE_SIZE)
-
     private String title;
 
     @NotBlank(message = "Author " + BookConstants.MSG_NOTBLANK)
@@ -46,5 +48,5 @@ public class BookCreateDTO {
     private Long userId;
 
     @NotNull(message = "Category id must be not null")
-    private Long categoryId;
+    private List<Long> categoryIds;
 }

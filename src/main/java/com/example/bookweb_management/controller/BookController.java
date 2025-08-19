@@ -27,10 +27,10 @@ public class BookController {
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/{code}")
-    public BookResponseDTO getBook(@PathVariable Long code)
+    @GetMapping("/{id}")
+    public BookResponseDTO getBook(@PathVariable Long id)
     {
-        return bookService.getBook(code);
+        return bookService.getBook(id);
     }
 
     @PostMapping
@@ -39,16 +39,16 @@ public class BookController {
         return bookService.createBook(createDTO);
     }
 
-    @PutMapping("/{code}")
-    public BookResponseDTO updateBook(@PathVariable Long code,@RequestBody @Valid BookUpdateDTO updateDTO)
+    @PutMapping("/{id}")
+    public BookResponseDTO updateBook(@PathVariable Long id,@RequestBody @Valid BookUpdateDTO updateDTO)
     {
-        return bookService.updateBook(code, updateDTO);
+        return bookService.updateBook(id, updateDTO);
     }
 
-    @DeleteMapping("/{code}")
-    public void deleteBook(@PathVariable Long code)
+    @DeleteMapping("/{id}")
+    public void deleteBook(@PathVariable Long id)
     {
-        bookService.deleteBook(code);
+        bookService.deleteBook(id);
     }
 
     @GetMapping("/search")

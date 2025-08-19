@@ -1,8 +1,10 @@
 package com.example.bookweb_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
@@ -13,6 +15,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(exclude = {"books"})
 public class Category {
 
     @Id
@@ -22,7 +25,8 @@ public class Category {
     @Column(nullable = false, unique = true, length = 100)
     private String name;
 
-    //1 Category - n Book
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    //n Category - n Book
+    @ManyToMany(mappedBy = "categories")
+    @JsonIgnore
     private Set<Book> books = new HashSet<>();
 }
