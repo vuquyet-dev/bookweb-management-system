@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book List</title>
+</head>
+<body>
+    <h1 style="color: green"></h1>
+    <p th:if="${error}" th:text="${error}" style="color: red"></p>
+    <table border="1", th:if="${books}">
+        <thead>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Publisher</th>
+            <th>Page Count</th>
+            <th>Print Type</th>
+            <th>Language</th>
+            <th>Description</th>
+        </thead>
+        <tbody>
+            <tr th:each="book : ${books}">
+                <td th:text="${book.id}"></td>
+                <td th:text="${book.title}"></td>
+                <td th:text="${book.publisher}"></td>
+                <td th:text="${book.pageCount}"></td>
+                <td th:text="${book.printType}"></td>
+                <td th:text="${book.language}"></td>
+                <td th:text="${book.description}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
