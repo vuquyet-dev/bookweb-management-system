@@ -42,5 +42,6 @@ public class RestTemplateConfig {
         HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory(httpClient);
 
         return builder.requestFactory(() -> factory).build();
+        System.out.println();
     }
 }
