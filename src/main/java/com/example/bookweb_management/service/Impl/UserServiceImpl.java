@@ -12,6 +12,8 @@ import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,6 +27,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
     @Override
     public List<UserResponseDTO> getAllUsers() {
@@ -57,8 +61,8 @@ public class UserServiceImpl implements UserService {
         {
             throw new DuplicateIdentityNumberException("Identity number '" + createDTO.getIdentityNumber() + "' already exists");
         }
-
         User user = userMapper.toEntity(createDTO);
+        user.setPassword(encoder.encode(user.getPassword())); //encode password
         User saveUser = userRepository.save(user);
         return userMapper.toResponseDTO(saveUser);
     }

@@ -9,18 +9,19 @@ import com.example.bookweb_management.service.BookService;
 import com.example.bookweb_management.service.BookSyncService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@Controller //response bằng api view hoặc json
 @RequestMapping("/api/books")
 public class BookController {
 
@@ -33,7 +34,14 @@ public class BookController {
     @Autowired
     private BookSyncService bookSyncService;
 
-    @GetMapping("/booktest")//call api xem books trên web
+    @GetMapping("/csrf-token") // Lấy value token
+    @ResponseBody
+    public CsrfToken getCsrfToken(HttpServletRequest request)
+    {
+        return (CsrfToken) request.getAttribute("_csrf");
+    }
+
+    @GetMapping("/booktest")//call api xem books trên view
     public String bookTest(Model model) {
         try {
             String apiUrl = "https://www.googleapis.com/books/v1/volumes?q=java";
@@ -68,36 +76,42 @@ public class BookController {
     }
 
     @GetMapping
+    @ResponseBody //response bằng json khi dùng @Controller
     public List<BookResponseDTO> getAllBooks()
     {
         return bookService.getAllBooks();
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public BookResponseDTO getBook(@PathVariable Long id)
     {
         return bookService.getBook(id);
     }
 
     @PostMapping
+    @ResponseBody
     public BookResponseDTO createBook(@RequestBody @Valid BookCreateDTO createDTO)
     {
         return bookService.createBook(createDTO);
     }
 
     @PutMapping("/{id}")
+    @ResponseBody
     public BookResponseDTO updateBook(@PathVariable Long id,@RequestBody @Valid BookUpdateDTO updateDTO)
     {
         return bookService.updateBook(id, updateDTO);
     }
 
     @DeleteMapping("/{id}")
+    @ResponseBody
     public void deleteBook(@PathVariable Long id)
     {
         bookService.deleteBook(id);
     }
 
     @GetMapping("/search")
+    @ResponseBody
     public Page<BookResponseDTO> search(@RequestParam(defaultValue = "") String keyword,
                                         @RequestParam(defaultValue = "0") int page,
                                         @RequestParam(defaultValue = "5") int size)

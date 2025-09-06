@@ -12,6 +12,13 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  devtools:
+    restart:
+      enabled: true
+  security:
+    user:
+      name: quyet
+      password: 12345
 # RestTemplate timeouts (đọc bởi RestTemplateConfig)
 resttemplate:
   connect-timeout: 5s   # thời gian chờ thiết lập kết nối
