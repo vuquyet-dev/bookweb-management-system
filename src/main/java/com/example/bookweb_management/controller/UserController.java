@@ -3,6 +3,7 @@ package com.example.bookweb_management.controller;
 import com.example.bookweb_management.dto.userdto.UserCreateDTO;
 import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
+import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @PostMapping
+    @PostMapping("/register")
     public UserResponseDTO createUser(@RequestBody UserCreateDTO dto)
     {
         return userService.createUser(dto);
@@ -51,5 +52,12 @@ public class UserController {
     public Page<UserResponseDTO> search(String keyword, int page, int size)
     {
         return userService.search(keyword, page, size);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user)
+    {
+        System.out.println(user);
+        return userService.verify(user);
     }
 }
