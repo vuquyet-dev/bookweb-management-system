@@ -10,8 +10,10 @@ import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.mapper.UserMapper;
 import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,6 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -39,11 +42,13 @@ public class UserServiceImpl implements UserService {
 
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
+
+    @PreAuthorize("hasRole('ADMIN')") // Authorize method-level
     @Override
     public List<UserResponseDTO> getAllUsers() {
+        log.info("In method get users");
         return userMapper.toResponseDTOs(userRepository.findAll());
     }
-
 
     @Override
     public UserResponseDTO getUser(Long id) {
