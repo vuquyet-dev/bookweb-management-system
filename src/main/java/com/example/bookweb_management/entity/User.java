@@ -1,5 +1,7 @@
 package com.example.bookweb_management.entity;
 
+import com.example.bookweb_management.enums.UserRole;
+import com.example.bookweb_management.enums.UserRoleConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Cleanup;
@@ -43,6 +45,11 @@ public class User {
 
     @Column(nullable = false)
     private String address;
+
+    @Convert(converter = UserRoleConverter.class)
+    //@Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
 
     //1 user - n Posts
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

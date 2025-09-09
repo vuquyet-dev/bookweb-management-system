@@ -1,5 +1,6 @@
 package com.example.bookweb_management.dto.userdto;
 
+import com.example.bookweb_management.enums.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,4 +19,5 @@ public class UserResponseDTO {
     private int age;
     private LocalDate birthday;
     private String address;
+    private UserRole role;
 }

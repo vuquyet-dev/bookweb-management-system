@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.function.Function;
@@ -31,7 +30,7 @@ public class JWTService {
     }
 
     public String generateToken(String username) {
-        Map<String, Objects> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<>();
         return Jwts
                 .builder()
                 .claims()

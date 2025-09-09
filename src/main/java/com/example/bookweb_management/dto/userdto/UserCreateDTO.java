@@ -1,6 +1,7 @@
 package com.example.bookweb_management.dto.userdto;
 
 import com.example.bookweb_management.constant.UserConstants;
+import com.example.bookweb_management.enums.UserRole;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -41,4 +42,7 @@ public class UserCreateDTO {
 
     @NotBlank(message = UserConstants.MSG_ADDRESS_BLANK)
     private String address;
+
+    @NotBlank(message = "Role must be not blank")
+    private UserRole role;
 }
