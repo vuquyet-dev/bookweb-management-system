@@ -13,11 +13,21 @@ import com.example.bookweb_management.repository.BookRepository;
 import com.example.bookweb_management.repository.CategoryRepository;
 import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.BookService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -92,5 +102,62 @@ public class BookServiceImpl implements BookService {
     @Override
     public Page<BookResponseDTO> search(String keyword, int page, int size) {
         return null;
+    }
+
+    @Override
+    public void booksExcelExport(HttpServletResponse httpServletResponse) throws IOException {
+        List<Book> books = bookRepository.findAll();
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Books Info");
+
+        XSSFRow row = sheet.createRow(0);
+        row.createCell(0).setCellValue("ID");
+        row.createCell(1).setCellValue("Title");
+        row.createCell(2).setCellValue("author");
+        row.createCell(3).setCellValue("publisher");
+        row.createCell(4).setCellValue("Page Count");
+        row.createCell(5).setCellValue("Print Type");
+        row.createCell(6).setCellValue("Language");
+        row.createCell(7).setCellValue("Description");
+        row.createCell(8).setCellValue("User ID");
+        row.createCell(9).setCellValue("Category ID");
+
+        int dataRowIndex = 1;
+
+        for(Book book : books)
+        {
+            XSSFRow dataRow = sheet.createRow(dataRowIndex);
+            dataRow.createCell(0).setCellValue(book.getId());
+            dataRow.createCell(1).setCellValue(book.getTitle());
+            dataRow.createCell(2).setCellValue(book.getAuthor());
+            dataRow.createCell(3).setCellValue(book.getPublisher());
+            dataRow.createCell(4).setCellValue(book.getPageCount());
+            dataRow.createCell(5).setCellValue(book.getPrintType());
+            dataRow.createCell(6).setCellValue(book.getLanguage());
+            dataRow.createCell(7).setCellValue(book.getDescription());
+            dataRow.createCell(8).setCellValue(book.getUser().getId());
+            String categoryIds = Optional.ofNullable(book.getCategories())
+                    .orElse(Collections.emptySet())
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .map(Category::getName)// trả về name thay vì id cho dễ nhận biết
+                    .filter(s -> !s.isEmpty())
+                    .collect(Collectors.joining(", "));
+            dataRow.createCell(9).setCellValue(categoryIds);
+            dataRowIndex++;
+        }
+
+        for(int i = 0; i < 10; i++)
+        {
+            sheet.autoSizeColumn(i);
+            sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
+        }
+
+        ServletOutputStream sos = httpServletResponse.getOutputStream();
+        workbook.write(sos);
+        workbook.close();
+        sos.close();
+
     }
 }

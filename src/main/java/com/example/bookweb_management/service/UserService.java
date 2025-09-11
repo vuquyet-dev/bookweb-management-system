@@ -4,8 +4,10 @@ import com.example.bookweb_management.dto.userdto.UserCreateDTO;
 import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import com.example.bookweb_management.entity.User;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -17,4 +19,7 @@ public interface UserService {
     public Page<UserResponseDTO> search(String keyword, int page, int size);
 
     String verify(User user);
+
+    //Excel export
+    public void usersExcelExport(HttpServletResponse httpServletResponse) throws IOException;
 }

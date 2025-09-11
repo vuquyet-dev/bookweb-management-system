@@ -4,10 +4,12 @@ import com.example.bookweb_management.dto.commentdto.CommentCreateDTO;
 import com.example.bookweb_management.dto.commentdto.CommentResponseDTO;
 import com.example.bookweb_management.dto.commentdto.CommentUpdateDTO;
 import com.example.bookweb_management.service.CommentService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -51,5 +53,17 @@ public class CommentController {
     public Page<CommentResponseDTO> search(String keyword, int page, int size)
     {
         return commentService.search(keyword, page, size);
+    }
+
+    @GetMapping("/excel")
+    public void commentExcelExport(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=comments-list.xlsx";
+
+        httpServletResponse.setHeader(headerKey, headerValue);
+
+        commentService.commentsExcelExport(httpServletResponse);
     }
 }

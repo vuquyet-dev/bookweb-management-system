@@ -34,11 +34,18 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers(
+                                "/api/users/register",
+                                "/api/users/login",
+                                "/api/users/excel",
+                                "/api/books/excel",
+                                "/api/categories/excel",
+                                "/api/comments/excel",
+                                "/api/posts/excel").permitAll()
                         //hasAuthority() để check chính xác chuỗi được đặt trong UserPrincipal vd: ROLE_USER, còn hasRole() là chỉ check sau prefix là ROLE_
                         .requestMatchers("/api/books/booktest").hasRole("USER")
                         .anyRequest().authenticated())
-                .formLogin(Customizer.withDefaults()) // Dùng cho Test web app
+                //.formLogin(Customizer.withDefaults()) // Dùng cho Test web app
                 .httpBasic(Customizer.withDefaults()) // Dùng cho test REST API
                 .sessionManagement(session
                         -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

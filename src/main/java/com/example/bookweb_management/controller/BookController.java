@@ -7,6 +7,7 @@ import com.example.bookweb_management.dto.bookdto.GoogleApiBooksResponse;
 import com.example.bookweb_management.entity.Book;
 import com.example.bookweb_management.service.BookService;
 import com.example.bookweb_management.service.BookSyncService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,5 +119,17 @@ public class BookController {
                                         @RequestParam(defaultValue = "5") int size)
     {
         return bookService.search(keyword, page, size);
+    }
+
+    @GetMapping("/excel")
+    public void booksExcelExport(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=books-list.xlsx";
+
+        httpServletResponse.setHeader(headerKey, headerValue);
+
+        bookService.booksExcelExport(httpServletResponse);
     }
 }

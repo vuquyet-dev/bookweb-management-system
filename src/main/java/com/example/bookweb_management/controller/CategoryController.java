@@ -4,10 +4,12 @@ import com.example.bookweb_management.dto.categorydto.CategoryCreateDTO;
 import com.example.bookweb_management.dto.categorydto.CategoryResponseDTO;
 import com.example.bookweb_management.dto.categorydto.CategoryUpdateDTO;
 import com.example.bookweb_management.service.CategoryService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -49,5 +51,17 @@ public class CategoryController {
     public Page<CategoryResponseDTO> search(String keyword, int page, int size)
     {
         return categoryService.search(keyword, page, size);
+    }
+
+    @GetMapping("/excel")
+    public void categoriesExcelExport(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=categories-list.xlsx";
+
+        httpServletResponse.setHeader(headerKey, headerValue);
+
+        categoryService.categoriesExcelExport(httpServletResponse);
     }
 }

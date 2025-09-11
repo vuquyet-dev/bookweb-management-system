@@ -5,11 +5,13 @@ import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.service.UserService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -60,5 +62,19 @@ public class UserController {
     {
         System.out.println(user);
         return userService.verify(user);
+    }
+
+    @GetMapping("/excel")
+    public void excelExport(HttpServletResponse httpServletResponse) throws IOException {
+        httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");//định dạng Excel 2007+
+
+        //httpServletResponse.setContentType("application/octet-stream");
+
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment;filename=users-list.xlsx";
+
+        httpServletResponse.setHeader(headerKey, headerValue);
+
+        userService.usersExcelExport(httpServletResponse);
     }
 }

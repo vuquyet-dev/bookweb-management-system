@@ -12,10 +12,19 @@ import com.example.bookweb_management.repository.CommentRepository;
 import com.example.bookweb_management.repository.PostRepository;
 import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.CommentService;
+import jakarta.servlet.ServletOutputStream;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -72,5 +81,52 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Page<CommentResponseDTO> search(String keyword, int page, int size) {
         return null;
+    }
+
+    @Override
+    public void commentsExcelExport(HttpServletResponse httpServletResponse) throws IOException {
+        List<Comment> comments = commentRepository.findAll();
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Comments Info");
+
+        XSSFRow row = sheet.createRow(0);
+        row.createCell(0).setCellValue("ID");
+        row.createCell(1).setCellValue("Content");
+        row.createCell(2).setCellValue("Create At");
+        row.createCell(3).setCellValue("Update At");
+        row.createCell(4).setCellValue("User ID");
+        row.createCell(5).setCellValue("Post ID");
+
+        int dataRowIndex = 1;
+
+        CreationHelper creationHelper = workbook.getCreationHelper();
+        CellStyle dateStyle = workbook.createCellStyle();
+        dateStyle.setDataFormat(creationHelper.createDataFormat().getFormat("dd-MM-yyyy HH:mm:ss"));
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        for(Comment comment : comments)
+        {
+            XSSFRow dataRow = sheet.createRow(dataRowIndex);
+            dataRow.createCell(0).setCellValue(comment.getId());
+            dataRow.createCell(1).setCellValue(comment.getContent());
+            dataRow.createCell(2).setCellValue(comment.getCreateAt().format(formatter));
+            dataRow.createCell(3).setCellValue(comment.getUpdateAt().format(formatter));
+            dataRow.createCell(4).setCellValue(comment.getUser().getId());
+            dataRow.createCell(5).setCellValue(comment.getPost().getId());
+            dataRowIndex++;
+        }
+
+        for(int i = 0; i < 6; i++)
+        {
+            sheet.autoSizeColumn(i);
+            sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
+        }
+
+        ServletOutputStream sos = httpServletResponse.getOutputStream();
+        workbook.write(sos);
+        workbook.close();
+        sos.close();
     }
 }
