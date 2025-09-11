@@ -50,7 +50,9 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public Page<PostResponseDTO> search(String keyword, int page, int size)
+    public Page<PostResponseDTO> search(@RequestParam(defaultValue = "") String keyword,
+                                        @RequestParam(defaultValue = "0") int page,
+                                        @RequestParam(defaultValue = "5") int size)
     {
         return postService.search(keyword, page, size);
     }

@@ -21,6 +21,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -80,7 +82,19 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Page<CommentResponseDTO> search(String keyword, int page, int size) {
-        return null;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Comment> comments = commentRepository.searchByContent(keyword, pageable);
+
+        return comments.map(comment -> {
+            CommentResponseDTO dto = new CommentResponseDTO();
+            dto.setId(comment.getId());
+            dto.setContent(comment.getContent());
+            dto.setCreateAt(comment.getCreateAt());
+            dto.setUpdateAt(comment.getUpdateAt());
+            dto.setUserId(comment.getUser().getId());
+            dto.setPostId(comment.getPost().getId());
+            return dto;
+        });
     }
 
     @Override

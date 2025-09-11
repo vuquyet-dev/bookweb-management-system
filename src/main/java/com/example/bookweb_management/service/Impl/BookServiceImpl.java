@@ -23,6 +23,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -101,7 +103,23 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Page<BookResponseDTO> search(String keyword, int page, int size) {
-        return null;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> books = bookRepository.searchByTitleOrAuthorOrPublisher(keyword, pageable);
+
+        return books.map(book -> {
+            BookResponseDTO dto = new BookResponseDTO();
+            dto.setId(book.getId());
+            dto.setTitle(book.getTitle());
+            dto.setAuthor(book.getAuthor());
+            dto.setPublisher(book.getPublisher());
+            dto.setPageCount(book.getPageCount());
+            dto.setPrintType(book.getPrintType());
+            dto.setLanguage(book.getLanguage());
+            dto.setDescription(book.getDescription());
+            dto.setUserId(book.getUser().getId());
+            dto.setCategoryIds(book.getCategories().stream().map(Category::getId).toList());
+            return dto;
+        });
     }
 
     @Override

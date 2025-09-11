@@ -48,7 +48,11 @@ public class CategoryController {
     {
         categoryService.deleteCategory(id);
     }
-    public Page<CategoryResponseDTO> search(String keyword, int page, int size)
+
+    @GetMapping("/search")
+    public Page<CategoryResponseDTO> search(@RequestParam(defaultValue = "") String keyword,
+                                            @RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "5") int size)
     {
         return categoryService.search(keyword, page, size);
     }

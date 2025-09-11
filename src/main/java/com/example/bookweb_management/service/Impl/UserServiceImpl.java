@@ -23,6 +23,9 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -124,7 +127,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Page<UserResponseDTO> search(String keyword, int page, int size) {
-        return null;
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        Page<User> users = userRepository.searchByFullnameOrIdentityNumber(keyword, pageable);
+
+        return users.map(user -> {
+            UserResponseDTO dto = new UserResponseDTO();
+            dto.setId(user.getId());
+            dto.setUsername(user.getUsername());
+            dto.setFullname(user.getFullname());
+            dto.setPhoneNumber(user.getPhoneNumber());
+            dto.setIdentityNumber(user.getIdentityNumber());
+            dto.setAge(user.getAge());
+            dto.setBirthday(user.getBirthday());
+            dto.setAddress(user.getAddress());
+            dto.setRole(user.getRole());
+            return dto;
+        });
     }
 
     @Override

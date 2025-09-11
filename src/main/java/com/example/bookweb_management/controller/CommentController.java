@@ -50,7 +50,7 @@ public class CommentController {
     }
 
     @GetMapping("/search")
-    public Page<CommentResponseDTO> search(String keyword, int page, int size)
+    public Page<CommentResponseDTO> search(@RequestParam(defaultValue = "") String keyword,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "5") int size)
     {
         return commentService.search(keyword, page, size);
     }

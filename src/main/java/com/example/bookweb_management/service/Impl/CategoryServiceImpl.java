@@ -3,6 +3,7 @@ package com.example.bookweb_management.service.Impl;
 import com.example.bookweb_management.dto.categorydto.CategoryCreateDTO;
 import com.example.bookweb_management.dto.categorydto.CategoryResponseDTO;
 import com.example.bookweb_management.dto.categorydto.CategoryUpdateDTO;
+import com.example.bookweb_management.entity.Book;
 import com.example.bookweb_management.entity.Category;
 import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.exception.category_exception.DuplicateNameException;
@@ -16,6 +17,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -68,7 +71,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Page<CategoryResponseDTO> search(String keyword, int page, int size) {
-        return null;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Category> categories = categoryRepository.searchByName(keyword, pageable);
+
+        return categories.map(category -> {
+            CategoryResponseDTO dto = new CategoryResponseDTO();
+            dto.setId(category.getId());
+            dto.setName(category.getName());
+            return dto;
+        });
     }
 
     @Override

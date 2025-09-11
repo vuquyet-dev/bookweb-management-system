@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public Page<UserResponseDTO> search(String keyword, int page, int size)
+    public Page<UserResponseDTO> search(@RequestParam(defaultValue = "") String keyword,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "5") int size)
     {
         return userService.search(keyword, page, size);
     }

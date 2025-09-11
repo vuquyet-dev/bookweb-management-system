@@ -3,6 +3,7 @@ package com.example.bookweb_management.service.Impl;
 import com.example.bookweb_management.dto.postdto.PostCreateDTO;
 import com.example.bookweb_management.dto.postdto.PostResponseDTO;
 import com.example.bookweb_management.dto.postdto.PostUpdateDTO;
+import com.example.bookweb_management.entity.Comment;
 import com.example.bookweb_management.entity.Post;
 import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.exception.ResourceNotFoundException;
@@ -17,6 +18,8 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -72,7 +75,18 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Page<PostResponseDTO> search(String keyword, int page, int size) {
-        return null;
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Post> posts = postRepository.searchByTitleOrContent(keyword, pageable);
+
+        return posts.map(post ->{
+            PostResponseDTO dto = new PostResponseDTO();
+            dto.setId(post.getId());
+            dto.setTitle(post.getTitle());
+            dto.setContent(post.getContent());
+            dto.setCreateAt(post.getCreateAt());
+            dto.setUserId(post.getUser().getId());
+            return dto;
+        });
     }
 
     @Override
