@@ -19,31 +19,31 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<PostResponseDTO> getAllPosts()
     {
         return postService.getAllPosts();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public PostResponseDTO getPost(@PathVariable Long id)
     {
         return postService.getPost(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public PostResponseDTO createPost(@RequestBody PostCreateDTO createDTO)
     {
         return postService.createPost(createDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public PostResponseDTO updatePost(@PathVariable Long id,@RequestBody PostUpdateDTO updateDTO)
     {
         return postService.updatePost(id, updateDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deletePost(@PathVariable Long id)
     {
         postService.deletePost(id);

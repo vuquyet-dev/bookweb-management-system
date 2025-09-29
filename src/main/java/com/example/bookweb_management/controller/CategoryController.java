@@ -19,31 +19,31 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<CategoryResponseDTO> getAllCategories()
     {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public CategoryResponseDTO getCategory(@PathVariable Long id)
     {
         return categoryService.getCategory(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public CategoryResponseDTO createCategory(@RequestBody CategoryCreateDTO createDTO)
     {
         return categoryService.createCategory(createDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public CategoryResponseDTO updateCategory(@PathVariable Long id,@RequestBody CategoryUpdateDTO updateDTO)
     {
         return categoryService.updateCategory(id, updateDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteCategory(@PathVariable Long id)
     {
         categoryService.deleteCategory(id);

@@ -17,6 +17,5 @@ public interface PostService {
     public PostResponseDTO updatePost(Long id, PostUpdateDTO updateDTO);
     public void deletePost(Long id);
     public Page<PostResponseDTO> search(String keyword, int page, int size);
-
     public void postsExcelExport(HttpServletResponse httpServletResponse) throws IOException;
 }

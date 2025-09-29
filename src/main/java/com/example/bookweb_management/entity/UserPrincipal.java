@@ -1,12 +1,10 @@
 package com.example.bookweb_management.entity;
 
-import com.example.bookweb_management.enums.UserRole;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
 
 public class UserPrincipal implements UserDetails {
 
@@ -17,10 +15,22 @@ public class UserPrincipal implements UserDetails {
         this.user = user;
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String roleName = user.getRole() == UserRole.ADMIN ? "ROLE_ADMIN" : "ROLE_USER";
-        return Collections.singleton(new SimpleGrantedAuthority(roleName));
+//        return user.getRoles().stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getName()))
+//                .toList();
+        Set<GrantedAuthority> authorities = new HashSet<>();
+
+        // Map roles
+        user.getRoles().forEach(role -> {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            role.getPermissions().forEach(permission -> {
+                authorities.add(new SimpleGrantedAuthority(permission.getName()));
+            });
+        });
+        return authorities;
     }
 
     @Override

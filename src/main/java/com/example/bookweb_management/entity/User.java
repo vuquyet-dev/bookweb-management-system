@@ -1,16 +1,15 @@
 package com.example.bookweb_management.entity;
 
-import com.example.bookweb_management.enums.UserRole;
-import com.example.bookweb_management.enums.UserRoleConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Cleanup;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -46,11 +45,6 @@ public class User {
     @Column(nullable = false)
     private String address;
 
-    @Convert(converter = UserRoleConverter.class)
-    //@Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private UserRole role;
-
     //1 user - n Posts
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
@@ -62,4 +56,12 @@ public class User {
     //1 user - n Books
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<Role> roles = new HashSet<>();
 }

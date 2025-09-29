@@ -20,13 +20,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<UserResponseDTO> getAllUsers()
     {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public UserResponseDTO getUser(@PathVariable Long id)
     {
         return userService.getUser(id);
@@ -39,13 +39,13 @@ public class UserController {
         return userService.createUser(dto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public UserResponseDTO update(@PathVariable Long id,@RequestBody @Valid UserUpdateDTO dto)
     {
         return userService.update(id, dto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteUser(@PathVariable Long id)
     {
         userService.deleteUser(id);

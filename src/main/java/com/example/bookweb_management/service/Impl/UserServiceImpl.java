@@ -3,11 +3,13 @@ package com.example.bookweb_management.service.Impl;
 import com.example.bookweb_management.dto.userdto.UserCreateDTO;
 import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
+import com.example.bookweb_management.entity.Role;
 import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.exception.user_exception.DuplicateIdentityNumberException;
 import com.example.bookweb_management.exception.user_exception.DuplicateUsernameException;
 import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.mapper.UserMapper;
+import com.example.bookweb_management.repository.RoleRepository;
 import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.UserService;
 import jakarta.servlet.ServletOutputStream;
@@ -35,8 +37,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -49,6 +54,9 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -57,7 +65,7 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
 
 
-    @PreAuthorize("hasRole('ADMIN')") // Authorize method-level
+    //@PreAuthorize("hasRole('ADMIN')") // Authorize method-level
     @Override
     public List<UserResponseDTO> getAllUsers() {
         log.info("In method get users");
@@ -91,6 +99,10 @@ public class UserServiceImpl implements UserService {
         }
         User user = userMapper.toEntity(createDTO);
         user.setPassword(encoder.encode(user.getPassword())); //encode password
+
+        Set<Role> roles = new HashSet<>(roleRepository.findAllById(createDTO.getRoleIds()));
+        user.setRoles(roles);
+
         User saveUser = userRepository.save(user);
         return userMapper.toResponseDTO(saveUser);
     }
@@ -98,25 +110,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Not found with username: " + id));
-        Optional<User> existingUser = userRepository
-                .findByUsernameOrIdentityNumber(dto.getUsername(), dto.getIdentityNumber());
-
-        if (existingUser.isPresent()) {
-            if (existingUser.get().getUsername().equals(dto.getUsername())) {
-                throw new DuplicateUsernameException("Username '" + dto.getUsername() + "' already exists");
-            }
-            if (existingUser.get().getIdentityNumber().equals(dto.getIdentityNumber())) {
-                throw new DuplicateIdentityNumberException("Identity number '" + dto.getIdentityNumber() + "' already exists");
-            }
-        }
-        user.setPassword(dto.getPassword());
+        user.setPassword(encoder.encode(dto.getPassword()));
         user.setFullname(dto.getFullname());
         user.setPhoneNumber(dto.getPhoneNumber());
         user.setIdentityNumber(dto.getIdentityNumber());
         user.setAge(dto.getAge());
         user.setBirthday(dto.getBirthday());
         user.setAddress(dto.getAddress());
+
+        Set<Role> roles = new HashSet<>(roleRepository.findAllById(dto.getRoleIds()));
+        user.setRoles(roles);
+
         User saveUser = userRepository.save(user);
+
         return userMapper.toResponseDTO(saveUser);
     }
 
@@ -140,7 +146,6 @@ public class UserServiceImpl implements UserService {
             dto.setAge(user.getAge());
             dto.setBirthday(user.getBirthday());
             dto.setAddress(user.getAddress());
-            dto.setRole(user.getRole());
             return dto;
         });
     }
@@ -189,7 +194,6 @@ public class UserServiceImpl implements UserService {
             dataRow.createCell(5).setCellValue(user.getAge());
             dataRow.createCell(6).setCellValue(user.getBirthday());
             dataRow.createCell(7).setCellValue(user.getAddress());
-            dataRow.createCell(8).setCellValue(String.valueOf(user.getRole()));
             dataRowIndex++;
         }
 

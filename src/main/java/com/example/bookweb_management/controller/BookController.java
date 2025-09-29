@@ -77,35 +77,35 @@ public class BookController {
         return "book-list"; // trỏ tới templates/book-list.html
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ResponseBody //response bằng json khi dùng @Controller
     public List<BookResponseDTO> getAllBooks()
     {
         return bookService.getAllBooks();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     @ResponseBody
     public BookResponseDTO getBook(@PathVariable Long id)
     {
         return bookService.getBook(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @ResponseBody
     public BookResponseDTO createBook(@RequestBody @Valid BookCreateDTO createDTO)
     {
         return bookService.createBook(createDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     @ResponseBody
     public BookResponseDTO updateBook(@PathVariable Long id,@RequestBody @Valid BookUpdateDTO updateDTO)
     {
         return bookService.updateBook(id, updateDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @ResponseBody
     public void deleteBook(@PathVariable Long id)
     {

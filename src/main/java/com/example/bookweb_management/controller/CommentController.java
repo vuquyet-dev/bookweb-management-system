@@ -19,31 +19,31 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<CommentResponseDTO> getAllComments()
     {
         return commentService.getAllComments();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     public CommentResponseDTO getComment(@PathVariable Long id)
     {
         return commentService.getComment(id);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public CommentResponseDTO createComment(@RequestBody CommentCreateDTO createDTO)
     {
         return commentService.createComment(createDTO);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public CommentResponseDTO updateComment(@PathVariable Long id,@RequestBody CommentUpdateDTO updateDTO)
     {
         return commentService.updateComment(id, updateDTO);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public void deleteComment(@PathVariable Long id)
     {
         commentService.deleteComment(id);

@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
 import com.example.bookweb_management.entity.User;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public interface UserMapper {
     User toEntity(UserUpdateDTO dto);
 
     // Entity -> ResponseDTO
+    //@Mapping(target = "roleIds", expression = "java(entity.getRoles().stream().map(r -> r.getId()).collect(java.util.stream.Collectors.toSet()))")
+    //@Mapping(target = "roleIds", source = "roles")
     UserResponseDTO toResponseDTO(User entity);
 
     List<UserResponseDTO> toResponseDTOs(List<User> entities);

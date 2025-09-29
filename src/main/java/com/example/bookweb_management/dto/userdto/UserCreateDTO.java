@@ -1,11 +1,13 @@
 package com.example.bookweb_management.dto.userdto;
 
 import com.example.bookweb_management.constant.UserConstants;
-import com.example.bookweb_management.enums.UserRole;
+import com.example.bookweb_management.entity.Role;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -43,6 +45,7 @@ public class UserCreateDTO {
     @NotBlank(message = UserConstants.MSG_ADDRESS_BLANK)
     private String address;
 
-    @NotBlank(message = "Role must be not blank")
-    private UserRole role;
+    @NotEmpty(message = "Role must be not empty")
+    private Set<Long> roleIds = new HashSet<>();
+
 }
