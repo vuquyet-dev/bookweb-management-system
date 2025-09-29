@@ -56,10 +56,17 @@ public class RoleController {
         return roleService.search(keyword, page, size);
     }
 
-    @PutMapping("/{id}/permissions")
-    public ResponseEntity<RoleResponseDTO> assignPermissions(@PathVariable Long id,
-                                                             @RequestBody List<Long> permissionIds)
+    @PutMapping("/add/{roleId}/{permissionId}")
+    public RoleResponseDTO addPermission(@PathVariable Long roleId,
+                                         @PathVariable Long permissionId)
     {
-        return ResponseEntity.ok(roleService.assignPermissions(id, permissionIds));
+        return roleService.addPermission(roleId, permissionId);
+    }
+
+    @DeleteMapping("/remove/{roleId}/{permissionId}")
+    public RoleResponseDTO removePermission(@PathVariable Long roleId,
+                                            @PathVariable Long permissionId)
+    {
+        return roleService.removePermission(roleId, permissionId);
     }
 }

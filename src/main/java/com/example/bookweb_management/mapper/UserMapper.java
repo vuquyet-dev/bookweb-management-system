@@ -3,11 +3,17 @@ package com.example.bookweb_management.mapper;
 import com.example.bookweb_management.dto.userdto.UserCreateDTO;
 import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
+import com.example.bookweb_management.entity.Permission;
+import com.example.bookweb_management.entity.Role;
 import com.example.bookweb_management.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.Comparator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

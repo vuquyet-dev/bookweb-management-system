@@ -19,6 +19,10 @@ spring:
     user:
       name: quyet
       password: 12345
+
+logging:
+  level:
+    org.springframework.security: DEBUG
 # RestTemplate timeouts (đọc bởi RestTemplateConfig)
 resttemplate:
   connect-timeout: 5s   # thời gian chờ thiết lập kết nối

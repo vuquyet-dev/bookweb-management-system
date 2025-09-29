@@ -42,18 +42,16 @@ public class SecurityConfig {
                                 "/api/users/login",
                                 "/api/*/all",
                                 "/api/*/get/*",
-                                "/api/*/search",
-                                "/api/users/update/*")
-                        .permitAll()
+                                "/api/*/search").permitAll()
                         //hasAuthority() để check chính xác chuỗi được đặt trong UserPrincipal vd: ROLE_USER, còn hasRole() là chỉ check sau prefix là ROLE_
-                        .requestMatchers("/**").hasRole("ADMIN")
+                        .requestMatchers("/api/**").hasRole("ADMIN")
                         .requestMatchers("/api/books/**",
                                 "/api/categories/**",
                                 "/api/comments/**",
                                 "/api/posts/**",
                                 "/api/users/**").hasRole("MANAGER")
                         .requestMatchers("/api/books/booktest").hasRole("USER")
-                        //.requestMatchers("/")
+                        .requestMatchers("/api/**").permitAll()
                         .anyRequest().authenticated())
                 //.formLogin(Customizer.withDefaults()) // Dùng cho Test web app
                 .httpBasic(Customizer.withDefaults()) // Dùng cho test REST API

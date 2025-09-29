@@ -14,5 +14,8 @@ public interface RoleService {
     public RoleResponseDTO updateRole(Long id, RoleUpdateDTO updateDTO);
     public void deleteRole(Long id);
     public Page<RoleResponseDTO> search(String keyword, int page, int size);
-    RoleResponseDTO assignPermissions(Long id, List<Long> permissionIds);
+
+    RoleResponseDTO addPermission(Long roleId, Long permissionId);
+    RoleResponseDTO removePermission(Long roleId, Long permissionId);
+
 }

@@ -81,12 +81,22 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleResponseDTO assignPermissions(Long id, List<Long> permissionIds) {
-        Role role = roleRepository.findById(id).orElseThrow(() -> new RuntimeException("Role not found"));
-        List<Permission> permissions = permissionRepository.findAllById(permissionIds);
-        role.setPermissions(new HashSet<>(permissions));
+    public RoleResponseDTO addPermission(Long roleId, Long permissionId) {
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Not found Role with id: " + roleId));
+        Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new ResourceNotFoundException("Not found Permission with id: " + permissionId));
 
-        Role saved = roleRepository.save(role);
-        return roleMapper.toResponseDTO(saved);
+        role.getPermissions().add(permission);
+        Role saveRole = roleRepository.save(role);
+        return roleMapper.toResponseDTO(saveRole);
+    }
+
+    @Override
+    public RoleResponseDTO removePermission(Long roleId, Long permissionId) {
+        Role role = roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException("Not found Role with id: " + roleId));
+        Permission permission = permissionRepository.findById(permissionId).orElseThrow(() -> new ResourceNotFoundException("Not found Permission with id: " + permissionId));
+
+        role.getPermissions().remove(permission);
+        Role saveRole = roleRepository.save(role);
+        return roleMapper.toResponseDTO(saveRole);
     }
 }

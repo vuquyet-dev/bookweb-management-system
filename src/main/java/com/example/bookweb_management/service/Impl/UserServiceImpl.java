@@ -3,6 +3,7 @@ package com.example.bookweb_management.service.Impl;
 import com.example.bookweb_management.dto.userdto.UserCreateDTO;
 import com.example.bookweb_management.dto.userdto.UserResponseDTO;
 import com.example.bookweb_management.dto.userdto.UserUpdateDTO;
+import com.example.bookweb_management.entity.Permission;
 import com.example.bookweb_management.entity.Role;
 import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.exception.user_exception.DuplicateIdentityNumberException;
@@ -37,10 +38,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
