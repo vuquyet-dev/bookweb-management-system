@@ -34,24 +34,36 @@ public class SecurityConfig {
         return http
                 .csrf(customizer -> customizer.disable())
                 .authorizeHttpRequests(request -> request
-                        .requestMatchers("/api/users/all",
-                                "/api/users/get/*",
-                                "/api/users/search").hasAnyRole("ADMIN", "MANAGER")
-                        .requestMatchers(
+
+                        .requestMatchers( // public -> cụ thể -> bao trùm
                                 "/api/users/register",
                                 "/api/users/login",
-                                "/api/*/all",
-                                "/api/*/get/*",
-                                "/api/*/search").permitAll()
-                        //hasAuthority() để check chính xác chuỗi được đặt trong UserPrincipal vd: ROLE_USER, còn hasRole() là chỉ check sau prefix là ROLE_
-                        .requestMatchers("/api/**").hasRole("ADMIN")
+
+                                "/api/books/all",
+                                "/api/categories/all",
+                                "/api/posts/all",
+
+                                "/api/books/get/*",
+                                "/api/categories/get/*",
+                                "/api/posts/get/*",
+
+                                "/api/books/search",
+                                "/api/categories/search",
+                                "/api/posts/search").permitAll()
+
+                        .requestMatchers("/api/books/booktest",
+                                "/api/users/update/*").hasAnyRole("USER", "MANAGER", "ADMIN")
+
                         .requestMatchers("/api/books/**",
                                 "/api/categories/**",
                                 "/api/comments/**",
                                 "/api/posts/**",
-                                "/api/users/**").hasRole("MANAGER")
-                        .requestMatchers("/api/books/booktest").hasRole("USER")
-                        .requestMatchers("/api/**").permitAll()
+                                "/api/users/all",
+                                "/api/users/get/*",
+                                "/api/users/search").hasAnyRole("MANAGER", "ADMIN")
+
+                        .requestMatchers("/**").hasRole("ADMIN")
+                        //hasAuthority() để check chính xác chuỗi được đặt trong UserPrincipal vd: ROLE_USER, còn hasRole() là chỉ check sau prefix là ROLE_
                         .anyRequest().authenticated())
                 //.formLogin(Customizer.withDefaults()) // Dùng cho Test web app
                 .httpBasic(Customizer.withDefaults()) // Dùng cho test REST API
