@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -26,7 +27,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.swing.plaf.IconUIResource;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -108,7 +111,6 @@ public class BookServiceImpl implements BookService {
 
         return books.map(book -> {
             BookResponseDTO dto = new BookResponseDTO();
-            dto.setId(book.getId());
             dto.setTitle(book.getTitle());
             dto.setAuthor(book.getAuthor());
             dto.setPublisher(book.getPublisher());
@@ -116,13 +118,10 @@ public class BookServiceImpl implements BookService {
             dto.setPrintType(book.getPrintType());
             dto.setLanguage(book.getLanguage());
             dto.setDescription(book.getDescription());
-            dto.setUserId(book.getUser().getId());
             dto.setCategoryIds(book.getCategories().stream().map(Category::getId).toList());
             return dto;
         });
-    }
-
-    @Override
+    }@Override
     public void booksExcelExport(HttpServletResponse httpServletResponse) throws IOException {
         List<Book> books = bookRepository.findAll();
 
@@ -130,31 +129,27 @@ public class BookServiceImpl implements BookService {
         XSSFSheet sheet = workbook.createSheet("Books Info");
 
         XSSFRow row = sheet.createRow(0);
-        row.createCell(0).setCellValue("ID");
-        row.createCell(1).setCellValue("Title");
-        row.createCell(2).setCellValue("author");
-        row.createCell(3).setCellValue("publisher");
-        row.createCell(4).setCellValue("Page Count");
-        row.createCell(5).setCellValue("Print Type");
-        row.createCell(6).setCellValue("Language");
-        row.createCell(7).setCellValue("Description");
-        row.createCell(8).setCellValue("User ID");
-        row.createCell(9).setCellValue("Category ID");
+        row.createCell(0).setCellValue("Title");
+        row.createCell(1).setCellValue("author");
+        row.createCell(2).setCellValue("publisher");
+        row.createCell(3).setCellValue("Page Count");
+        row.createCell(4).setCellValue("Print Type");
+        row.createCell(5).setCellValue("Language");
+        row.createCell(6).setCellValue("Description");
+        row.createCell(7).setCellValue("Category Name");
 
         int dataRowIndex = 1;
 
         for(Book book : books)
         {
             XSSFRow dataRow = sheet.createRow(dataRowIndex);
-            dataRow.createCell(0).setCellValue(book.getId());
-            dataRow.createCell(1).setCellValue(book.getTitle());
-            dataRow.createCell(2).setCellValue(book.getAuthor());
-            dataRow.createCell(3).setCellValue(book.getPublisher());
-            dataRow.createCell(4).setCellValue(book.getPageCount());
-            dataRow.createCell(5).setCellValue(book.getPrintType());
-            dataRow.createCell(6).setCellValue(book.getLanguage());
-            dataRow.createCell(7).setCellValue(book.getDescription());
-            dataRow.createCell(8).setCellValue(book.getUser().getId());
+            dataRow.createCell(0).setCellValue(book.getTitle());
+            dataRow.createCell(1).setCellValue(book.getAuthor());
+            dataRow.createCell(2).setCellValue(book.getPublisher());
+            dataRow.createCell(3).setCellValue(book.getPageCount());
+            dataRow.createCell(4).setCellValue(book.getPrintType());
+            dataRow.createCell(5).setCellValue(book.getLanguage());
+            dataRow.createCell(6).setCellValue(book.getDescription());
             String categoryIds = Optional.ofNullable(book.getCategories())
                     .orElse(Collections.emptySet())
                     .stream()
@@ -162,11 +157,11 @@ public class BookServiceImpl implements BookService {
                     .map(Category::getName)// trả về name thay vì id cho dễ nhận biết
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.joining(", "));
-            dataRow.createCell(9).setCellValue(categoryIds);
+            dataRow.createCell(7).setCellValue(categoryIds);
             dataRowIndex++;
         }
 
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 8; i++)
         {
             sheet.autoSizeColumn(i);
             sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
@@ -178,4 +173,49 @@ public class BookServiceImpl implements BookService {
         sos.close();
 
     }
+
+    @Override
+    public void booksExcelImport(MultipartFile multipartFile) throws IOException {
+        DataFormatter formatter = new DataFormatter();
+
+        try(Workbook workbook = WorkbookFactory.create(multipartFile.getInputStream())) {
+            Sheet sheet = workbook.getSheetAt(0);
+
+            for(int i = 1; i <= sheet.getLastRowNum(); i++)
+            {
+                Row row = sheet.getRow(i);
+                if(row == null) continue;
+
+                Book book = new Book();
+                book.setTitle(formatter.formatCellValue(row.getCell(0)));
+                book.setAuthor(formatter.formatCellValue(row.getCell(1)));
+                book.setPublisher(formatter.formatCellValue(row.getCell(2)));
+
+                //Mặc định data trong excel kiểu text nên phải parse sang kiểu int để lưu vào db
+                book.setPageCount(Integer.parseInt(formatter.formatCellValue(row.getCell(3))));
+
+                book.setPrintType(formatter.formatCellValue(row.getCell(4)));
+                book.setLanguage(formatter.formatCellValue(row.getCell(5)));
+                book.setDescription(formatter.formatCellValue(row.getCell(6)));
+
+                String categoryName = formatter.formatCellValue(row.getCell(7));
+                if(categoryName != null && !categoryName.isEmpty())
+                {
+                    String[] names = categoryName.split(", ");
+                    for(String name : names)
+                    {
+                        Category category = categoryRepository.findByName(name.trim()).orElseThrow(() -> new ResourceNotFoundException("Category not found with name: " + name));
+                        if(category != null)
+                        {
+                            book.addCategory(category);
+                        }
+                    }
+                }
+
+                bookRepository.save(book);
+            }
+        }
+    }
+
+
 }

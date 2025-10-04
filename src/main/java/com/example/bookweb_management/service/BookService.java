@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.bookdto.BookResponseDTO;
 import com.example.bookweb_management.dto.bookdto.BookUpdateDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,4 +19,5 @@ public interface BookService {
     public Page<BookResponseDTO> search(String keyword, int page, int size);
 
     public void booksExcelExport(HttpServletResponse httpServletResponse) throws IOException;
+    public void booksExcelImport(MultipartFile multipartFile) throws IOException;
 }

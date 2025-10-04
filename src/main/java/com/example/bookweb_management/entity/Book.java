@@ -43,7 +43,7 @@ public class Book {
 
     //n Book - 1 User
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     //n Book - n Category
