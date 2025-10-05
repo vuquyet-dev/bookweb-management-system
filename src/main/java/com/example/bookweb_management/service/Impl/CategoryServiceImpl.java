@@ -8,10 +8,12 @@ import com.example.bookweb_management.entity.Category;
 import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.exception.category_exception.DuplicateNameException;
 import com.example.bookweb_management.mapper.CategoryMapper;
+import com.example.bookweb_management.repository.BookRepository;
 import com.example.bookweb_management.repository.CategoryRepository;
 import com.example.bookweb_management.service.CategoryService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -30,6 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     @Autowired
     private CategoryMapper categoryMapper;
@@ -113,6 +118,41 @@ public class CategoryServiceImpl implements CategoryService {
         workbook.write(sos);
         workbook.close();
         sos.close();
+    }
+
+    @Transactional
+    @Override
+    public void addBookToCategory(Long categoryId, Long bookId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + bookId));
+
+        if(category.getBooks().contains(book))
+        {
+            throw new IllegalStateException("Book with id " + bookId +
+                    " is alteady in category with id " + categoryId);
+        }
+
+        book.addCategory(category); // vì book là bên chủ sở hữu
+
+        bookRepository.save(book);
+    }
+
+    @Transactional
+    @Override
+    public void removeBookToCategory(Long categoryId, Long bookId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
+
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + bookId));
+
+        if(!category.getBooks().contains(book))
+        {
+            throw new ResourceNotFoundException("Book not found with id: " + bookId);
+        }
+
+        book.removeCategory(category);
+
+        bookRepository.save(book);
     }
 
 

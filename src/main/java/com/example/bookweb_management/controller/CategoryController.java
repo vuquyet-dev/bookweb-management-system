@@ -7,6 +7,7 @@ import com.example.bookweb_management.service.CategoryService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -67,5 +68,31 @@ public class CategoryController {
         httpServletResponse.setHeader(headerKey, headerValue);
 
         categoryService.categoriesExcelExport(httpServletResponse);
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<?> addBookToCategory(@RequestParam Long categoryId,
+                                               @RequestParam Long bookId)
+    {
+        try{
+            categoryService.addBookToCategory(categoryId, bookId);
+            return ResponseEntity.ok("Book added to category successfully!");
+        }catch (IllegalStateException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/remove")
+    public ResponseEntity<?> removeBookFromCategory(@RequestParam Long categoryId,
+                                                    @RequestParam Long bookId)
+    {
+        try{
+            categoryService.removeBookToCategory(categoryId, bookId);
+            return ResponseEntity.ok("Book removed from category successfully!");
+        }catch (IllegalStateException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

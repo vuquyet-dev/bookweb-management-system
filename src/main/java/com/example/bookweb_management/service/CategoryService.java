@@ -18,4 +18,7 @@ public interface CategoryService {
     public Page<CategoryResponseDTO> search(String keyword, int page, int size);
 
     public void categoriesExcelExport(HttpServletResponse httpServletResponse) throws IOException;
+
+    public void addBookToCategory(Long categoryId, Long bookId);
+    public void removeBookToCategory(Long categoryId, Long bookId);
 }
