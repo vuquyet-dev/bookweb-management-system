@@ -22,7 +22,7 @@ spring:
 
 logging:
   level:
-    org.springframework.security: DEBUG
+    com.fasterxml.jackson.databind: DEBUG
 # RestTemplate timeouts (đọc bởi RestTemplateConfig)
 resttemplate:
   connect-timeout: 5s   # thời gian chờ thiết lập kết nối

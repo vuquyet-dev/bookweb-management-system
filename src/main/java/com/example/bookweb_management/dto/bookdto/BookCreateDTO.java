@@ -32,20 +32,22 @@ public class BookCreateDTO {
     @NotNull(message = "Page count is not null")
     private int pageCount;
 
-    @NotBlank(message = "Author " + BookConstants.MSG_NOTBLANK)
+    @NotBlank(message = "Print Type " + BookConstants.MSG_NOTBLANK)
     @Size(min = 1, max = 50, message = BookConstants.MSG_PRINTTYPE_SIZE)
     private String printType;
 
-    @NotBlank(message = "Author " + BookConstants.MSG_NOTBLANK)
+    @NotBlank(message = "Language " + BookConstants.MSG_NOTBLANK)
     @Size(min = 1, max = 50, message = BookConstants.MSG_LANGUAGE_SIZE)
     private String language;
 
-    @NotBlank(message = "Author " + BookConstants.MSG_NOTBLANK)
+    @NotBlank(message = "Description " + BookConstants.MSG_NOTBLANK)
     @Size(min = 1, max = 1000, message = BookConstants.MSG_DESCRIPTION_SIZE)
     private String description;
 
-    @NotNull(message = "User id must be not null")
-    private Long userId;
+    @Min(value = 1, message = BookConstants.MSG_DESCRIPTION_SIZE)
+    @NotNull(message = "Quantity is not null")
+    private Long quantity;
+
 
     @NotNull(message = "Category id must be not null")
     private List<Long> categoryIds;

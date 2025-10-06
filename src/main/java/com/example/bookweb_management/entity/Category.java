@@ -1,5 +1,6 @@
 package com.example.bookweb_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,5 @@ public class Category {
 
     //n Category - n Book
     @ManyToMany(mappedBy = "categories")
-    @JsonIgnore
     private Set<Book> books = new HashSet<>();
 }

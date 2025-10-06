@@ -1,5 +1,7 @@
 package com.example.bookweb_management.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,10 +43,11 @@ public class Book {
     @Column(nullable = false)
     private String description;
 
-    //n Book - 1 User
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = true)
-    private User user;
+    @Column(nullable = false)
+    private Long quantity;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BorrowRecord> borrowRecords = new HashSet<>();
 
     //n Book - n Category
     @ManyToMany

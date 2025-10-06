@@ -15,9 +15,6 @@ import com.example.bookweb_management.repository.UserRepository;
 import com.example.bookweb_management.service.BookService;
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -66,9 +63,6 @@ public class BookServiceImpl implements BookService {
             throw new DuplicateTitleException("Title " + createDTO.getTitle() + " already exists");
         }
 
-        User user = userRepository.findById(createDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("Not found user with id: " + createDTO.getUserId()));
-
         Set<Category> categories = new HashSet<>(categoryRepository.findAllById(createDTO.getCategoryIds()));
         if (categories.isEmpty()) {
             throw new ResourceNotFoundException("Not found categories with ids: " + createDTO.getCategoryIds());
@@ -76,7 +70,6 @@ public class BookServiceImpl implements BookService {
 
         // Map DTO -> entity nhưng ignore categories/user trong mapper
         Book book = bookMapper.toEntity(createDTO);
-        book.setUser(user);
         
         book.setCategories(categories);
 
@@ -95,6 +88,7 @@ public class BookServiceImpl implements BookService {
         book.setPrintType(convert.getPrintType());
         book.setLanguage(convert.getLanguage());
         book.setDescription(convert.getDescription());
+        book.setQuantity(convert.getQuantity());
         Book savedBook = bookRepository.save(book);
         return bookMapper.toResponseDTO(savedBook);
     }
@@ -118,6 +112,7 @@ public class BookServiceImpl implements BookService {
             dto.setPrintType(book.getPrintType());
             dto.setLanguage(book.getLanguage());
             dto.setDescription(book.getDescription());
+            dto.setQuantity(book.getQuantity());
             dto.setCategoryIds(book.getCategories().stream().map(Category::getId).toList());
             return dto;
         });
@@ -136,7 +131,8 @@ public class BookServiceImpl implements BookService {
         row.createCell(4).setCellValue("Print Type");
         row.createCell(5).setCellValue("Language");
         row.createCell(6).setCellValue("Description");
-        row.createCell(7).setCellValue("Category Name");
+        row.createCell(7).setCellValue("Quantity");
+        row.createCell(8).setCellValue("Category Name");
 
         int dataRowIndex = 1;
 
@@ -150,18 +146,20 @@ public class BookServiceImpl implements BookService {
             dataRow.createCell(4).setCellValue(book.getPrintType());
             dataRow.createCell(5).setCellValue(book.getLanguage());
             dataRow.createCell(6).setCellValue(book.getDescription());
-            String categoryIds = Optional.ofNullable(book.getCategories())
+            dataRow.createCell(7).setCellValue(book.getQuantity());
+            String categoryNames = Optional.ofNullable(book.getCategories())
                     .orElse(Collections.emptySet())
                     .stream()
                     .filter(Objects::nonNull)
                     .map(Category::getName)// trả về name thay vì id cho dễ nhận biết
                     .filter(s -> !s.isEmpty())
                     .collect(Collectors.joining(", "));
-            dataRow.createCell(7).setCellValue(categoryIds);
+            dataRow.createCell(8).setCellValue(categoryNames);
             dataRowIndex++;
         }
 
-        for(int i = 0; i < 8; i++)
+        int totalColumns = sheet.getRow(0).getLastCellNum();
+        for(int i = 0; i < totalColumns; i++)
         {
             sheet.autoSizeColumn(i);
             sheet.setColumnWidth(i, sheet.getColumnWidth(i) + 1000);
@@ -197,8 +195,8 @@ public class BookServiceImpl implements BookService {
                 book.setPrintType(formatter.formatCellValue(row.getCell(4)));
                 book.setLanguage(formatter.formatCellValue(row.getCell(5)));
                 book.setDescription(formatter.formatCellValue(row.getCell(6)));
-
-                String categoryName = formatter.formatCellValue(row.getCell(7));
+                book.setQuantity(Long.parseLong(formatter.formatCellValue(row.getCell(7))));
+                String categoryName = formatter.formatCellValue(row.getCell(8));
                 if(categoryName != null && !categoryName.isEmpty())
                 {
                     String[] names = categoryName.split(", ");

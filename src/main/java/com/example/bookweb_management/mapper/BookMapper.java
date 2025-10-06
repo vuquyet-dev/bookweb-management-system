@@ -17,24 +17,20 @@ import java.util.stream.Collectors;
 public interface BookMapper {
     // CreateDTO -> Entity
     @Mapping(target="id", ignore=true) // nếu create
-    @Mapping(target="user", ignore=true)
     @Mapping(target="categories", ignore=true)
     Book toEntity(BookCreateDTO dto);
 
     // UpdateDTO -> Entity
     @Mapping(target="id", ignore=true) // nếu create
-    @Mapping(target="user", ignore=true)
     @Mapping(target="categories", ignore=true)
     Book toEntity(BookUpdateDTO dto);
 
     // Entity -> ResponseDTO
-    @Mapping(source = "id", target = "id") // ✨ map id từ entity sang dto
-    @Mapping(source = "user.id", target = "userId")
+    //@Mapping(source = "id", target = "id") // ✨ map id từ entity sang dto
     @Mapping(source = "categories", target = "categoryIds", qualifiedByName = "mapCategories")
     BookResponseDTO toResponseDTO(Book entity);
 
-    @Mapping(source = "id", target = "id") // ✨ map id
-    @Mapping(source = "user.id", target = "userId")
+    //@Mapping(source = "id", target = "id") // ✨ map id
     @Mapping(source = "categories", target = "categoryIds", qualifiedByName = "mapCategories")
     List<BookResponseDTO> toResponseDTOs(List<Book> entities);
 

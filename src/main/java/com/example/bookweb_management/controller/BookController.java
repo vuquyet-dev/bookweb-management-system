@@ -124,6 +124,7 @@ public class BookController {
     }
 
     @GetMapping("/export")
+    @ResponseBody
     public void booksExcelExport(HttpServletResponse httpServletResponse) throws IOException {
         httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
@@ -136,6 +137,7 @@ public class BookController {
     }
 
     @PostMapping("/import")
+    @ResponseBody
     public ResponseEntity<String> bookExcelImport(@RequestParam("file") MultipartFile multipartFile) throws IOException {
         bookService.booksExcelImport(multipartFile);
         return ResponseEntity.ok("Import successfully");

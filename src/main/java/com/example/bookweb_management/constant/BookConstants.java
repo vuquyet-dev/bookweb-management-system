@@ -12,4 +12,5 @@ public final class BookConstants {
     public static final String MSG_LANGUAGE_SIZE = "Language must be between 1 and 50 character";
     public static final String MSG_DESCRIPTION_SIZE = "Description must be between 1 and 1000 character";
     public static final String MSG_PAGECOUNT_MIN = "Page count is not negative";
+    public static final String MSG_QUANTITY_MIN = "Quantity is not negative";
 }

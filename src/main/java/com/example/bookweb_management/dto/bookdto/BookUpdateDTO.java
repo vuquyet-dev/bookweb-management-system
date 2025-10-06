@@ -43,8 +43,9 @@ public class BookUpdateDTO {
     @Size(min = 1, max = 1000, message = BookConstants.MSG_DESCRIPTION_SIZE)
     private String description;
 
-    @NotNull(message = "User id must be not null")
-    private Long userId;
+    @Min(value = 1, message = BookConstants.MSG_DESCRIPTION_SIZE)
+    @NotNull(message = "Quantity is not null")
+    private Long quantity;
 
     @NotNull(message = "Category id must be not null")
     private List<Long> categoryIds;

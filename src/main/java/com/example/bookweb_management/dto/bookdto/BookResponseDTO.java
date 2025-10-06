@@ -18,6 +18,6 @@ public class BookResponseDTO {
     private String printType;
     private String language;
     private String description;
-    private Long userId;
+    private Long quantity;
     private List<Long> categoryIds;
 }
