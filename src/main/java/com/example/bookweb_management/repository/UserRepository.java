@@ -21,6 +21,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "OR LOWER(u.identityNumber) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     Page<User> searchByFullnameOrIdentityNumber(@Param("keyword") String keyword, Pageable pageable);
 
-    User findByUsername(String username);
+    Optional<User> findByUsername(String username);
 
 }

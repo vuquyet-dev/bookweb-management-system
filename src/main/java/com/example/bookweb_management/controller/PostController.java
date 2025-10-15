@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 
 @RestController
@@ -44,8 +45,7 @@ public class PostController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deletePost(@PathVariable Long id)
-    {
+    public void deletePost(@PathVariable Long id) throws AccessDeniedException {
         postService.deletePost(id);
     }
 

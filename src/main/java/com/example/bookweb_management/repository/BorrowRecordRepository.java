@@ -17,10 +17,10 @@ public interface BorrowRecordRepository extends JpaRepository<BorrowRecord, Long
             "WHERE(:userId IS NULL OR b.user.id = :userId)" +
             " AND(:bookId IS NULL OR b.book.id = :bookId)" +
             " AND(:status IS NULL OR LOWER(b.status) LIKE LOWER(CONCAT('%', :status, '%')))" +
-            " AND(:startBorrowDate IS NULL OR b.borrowDate >= :borrowDate)" +
-            " AND(:endBorrowDate IS NULL OR b.borrowDate <= :endDate)" +
-            " AND(:startReturnDate IS NULL OR b.returnDate >= :returdDate)" +
-            " AND(:endReturnDate IS NULL OR b.returnDate <= :returnDate)")
+            " AND(:startBorrowDate IS NULL OR b.borrowDate >= :startBorrowDate)" +
+            " AND(:endBorrowDate IS NULL OR b.borrowDate <= :endBorrowDate)" +
+            " AND(:startReturnDate IS NULL OR b.returnDate >= :startReturnDate)" +
+            " AND(:endReturnDate IS NULL OR b.returnDate <= :endReturnDate)")
     Page<BorrowRecord>search(@Param("userId") Long userId,
                               @Param("bookId") Long bookId,
                               @Param("status")BorrowStatus status,

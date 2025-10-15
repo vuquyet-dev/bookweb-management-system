@@ -52,7 +52,9 @@ public class SecurityConfig {
                                 "/api/posts/search").permitAll()
 
                         .requestMatchers("/api/books/booktest",
-                                "/api/users/update/*").hasAnyRole("USER", "MANAGER", "ADMIN")
+                                "/api/users/update/*",
+                                "/api/posts/delete/*",
+                                "/api/comments/delete/*").hasAnyRole("USER")
 
                         .requestMatchers("/api/books/**",
                                 "/api/categories/**",

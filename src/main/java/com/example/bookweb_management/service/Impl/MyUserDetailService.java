@@ -2,6 +2,7 @@ package com.example.bookweb_management.service.Impl;
 
 import com.example.bookweb_management.entity.User;
 import com.example.bookweb_management.entity.UserPrincipal;
+import com.example.bookweb_management.exception.ResourceNotFoundException;
 import com.example.bookweb_management.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ public class MyUserDetailService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+        User user = userRepository.findByUsername(username).orElseThrow(() -> new ResourceNotFoundException("User not found with username: " + username));
 
         if(user == null)
         {
