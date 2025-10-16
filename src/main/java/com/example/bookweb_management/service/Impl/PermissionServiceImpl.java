@@ -40,8 +40,7 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public PermissionResponseDTO createPermission(PermissionCreateDTO createDTO) {
-        if(permissionRepository.existsByName(createDTO.getName()))
-        {
+        if (permissionRepository.existsByName(createDTO.getName())) {
             throw new DuplicateNameException("Permission " + createDTO.getName() + " already exists");
         }
         Permission permission = permissionMapper.toEntity(createDTO);

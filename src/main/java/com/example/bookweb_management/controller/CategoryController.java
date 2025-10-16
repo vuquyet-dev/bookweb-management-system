@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.categorydto.CategoryResponseDTO;
 import com.example.bookweb_management.dto.categorydto.CategoryUpdateDTO;
 import com.example.bookweb_management.service.CategoryService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +34,13 @@ public class CategoryController {
     }
 
     @PostMapping("/create")
-    public CategoryResponseDTO createCategory(@RequestBody CategoryCreateDTO createDTO)
+    public CategoryResponseDTO createCategory(@RequestBody @Valid CategoryCreateDTO createDTO)
     {
         return categoryService.createCategory(createDTO);
     }
 
     @PutMapping("/update/{id}")
-    public CategoryResponseDTO updateCategory(@PathVariable Long id,@RequestBody CategoryUpdateDTO updateDTO)
+    public CategoryResponseDTO updateCategory(@PathVariable Long id,@RequestBody @Valid CategoryUpdateDTO updateDTO)
     {
         return categoryService.updateCategory(id, updateDTO);
     }

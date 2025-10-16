@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.postdto.PostResponseDTO;
 import com.example.bookweb_management.dto.postdto.PostUpdateDTO;
 import com.example.bookweb_management.service.PostService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,13 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public PostResponseDTO createPost(@RequestBody PostCreateDTO createDTO)
+    public PostResponseDTO createPost(@RequestBody @Valid PostCreateDTO createDTO)
     {
         return postService.createPost(createDTO);
     }
 
     @PutMapping("/update/{id}")
-    public PostResponseDTO updatePost(@PathVariable Long id,@RequestBody PostUpdateDTO updateDTO)
+    public PostResponseDTO updatePost(@PathVariable Long id,@RequestBody @Valid PostUpdateDTO updateDTO)
     {
         return postService.updatePost(id, updateDTO);
     }

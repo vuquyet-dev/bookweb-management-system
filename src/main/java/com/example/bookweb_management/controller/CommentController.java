@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.commentdto.CommentResponseDTO;
 import com.example.bookweb_management.dto.commentdto.CommentUpdateDTO;
 import com.example.bookweb_management.service.CommentService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -33,13 +34,13 @@ public class CommentController {
     }
 
     @PostMapping("/create")
-    public CommentResponseDTO createComment(@RequestBody CommentCreateDTO createDTO)
+    public CommentResponseDTO createComment(@RequestBody @Valid CommentCreateDTO createDTO)
     {
         return commentService.createComment(createDTO);
     }
 
     @PutMapping("/update/{id}")
-    public CommentResponseDTO updateComment(@PathVariable Long id,@RequestBody CommentUpdateDTO updateDTO)
+    public CommentResponseDTO updateComment(@PathVariable Long id,@RequestBody @Valid CommentUpdateDTO updateDTO)
     {
         return commentService.updateComment(id, updateDTO);
     }
@@ -50,7 +51,9 @@ public class CommentController {
     }
 
     @GetMapping("/search")
-    public Page<CommentResponseDTO> search(@RequestParam(defaultValue = "") String keyword,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "5") int size)
+    public Page<CommentResponseDTO> search(@RequestParam(defaultValue = "") String keyword,
+                                           @RequestParam(defaultValue = "0") int page,
+                                           @RequestParam(defaultValue = "5") int size)
     {
         return commentService.search(keyword, page, size);
     }

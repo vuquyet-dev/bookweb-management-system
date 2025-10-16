@@ -4,6 +4,7 @@ import com.example.bookweb_management.dto.roledto.RoleCreateDTO;
 import com.example.bookweb_management.dto.roledto.RoleResponseDTO;
 import com.example.bookweb_management.dto.roledto.RoleUpdateDTO;
 import com.example.bookweb_management.service.RoleService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -31,13 +32,13 @@ public class RoleController {
     }
 
     @PostMapping("/create")
-    public RoleResponseDTO createRole(@RequestBody RoleCreateDTO createDTO)
+    public RoleResponseDTO createRole(@RequestBody @Valid RoleCreateDTO createDTO)
     {
         return roleService.createRole(createDTO);
     }
 
     @PutMapping("/update/{id}")
-    public RoleResponseDTO updateRole(@PathVariable Long id, @RequestBody RoleUpdateDTO updateDTO)
+    public RoleResponseDTO updateRole(@PathVariable Long id, @RequestBody @Valid RoleUpdateDTO updateDTO)
     {
         return roleService.updateRole(id, updateDTO);
     }

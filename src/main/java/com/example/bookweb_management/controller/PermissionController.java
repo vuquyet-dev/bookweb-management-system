@@ -4,6 +4,7 @@ import com.example.bookweb_management.dto.permission.PermissionCreateDTO;
 import com.example.bookweb_management.dto.permission.PermissionResponseDTO;
 import com.example.bookweb_management.dto.permission.PermissionUpdateDTO;
 import com.example.bookweb_management.service.PermissionService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +31,13 @@ public class PermissionController {
     }
 
     @PostMapping("/create")
-    public PermissionResponseDTO createPermission(@RequestBody PermissionCreateDTO createDTO)
+    public PermissionResponseDTO createPermission(@RequestBody @Valid PermissionCreateDTO createDTO)
     {
         return permissionService.createPermission(createDTO);
     }
 
     @PutMapping("/update/{id}")
-    public PermissionResponseDTO updatePermission(@PathVariable Long id, @RequestBody PermissionUpdateDTO updateDTO)
+    public PermissionResponseDTO updatePermission(@PathVariable Long id, @RequestBody @Valid PermissionUpdateDTO updateDTO)
     {
         return permissionService.updatePermission(id, updateDTO);
     }

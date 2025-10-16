@@ -9,8 +9,10 @@ import com.example.bookweb_management.service.BookService;
 import com.example.bookweb_management.service.BookSyncService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.stereotype.Controller;
@@ -25,6 +27,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller //response bằng api view hoặc json
 @RequestMapping("/api/books")
 public class BookController {
@@ -40,8 +43,7 @@ public class BookController {
 
     @GetMapping("/csrf-token") // Lấy value token
     @ResponseBody
-    public CsrfToken getCsrfToken(HttpServletRequest request)
-    {
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
         return (CsrfToken) request.getAttribute("_csrf");
     }
 
@@ -81,51 +83,48 @@ public class BookController {
 
     @GetMapping("/all")
     @ResponseBody //response bằng json khi dùng @Controller
-    public List<BookResponseDTO> getAllBooks()
-    {
-        return bookService.getAllBooks();
+    public ResponseEntity<List<BookResponseDTO>> getAllBooks() {
+        return ResponseEntity.ok(bookService.getAllBooks());
     }
 
     @GetMapping("/get/{id}")
     @ResponseBody
-    public BookResponseDTO getBook(@PathVariable Long id)
-    {
-        return bookService.getBook(id);
+    public ResponseEntity<BookResponseDTO> getBook(@PathVariable Long id) {
+        return ResponseEntity.ok(bookService.getBook(id));
     }
 
     @PostMapping("/create")
     @ResponseBody
-    public BookResponseDTO createBook(@RequestBody @Valid BookCreateDTO createDTO)
-    {
-        return bookService.createBook(createDTO);
+    public ResponseEntity<BookResponseDTO> createBook(@RequestBody @Valid BookCreateDTO createDTO) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(bookService.createBook(createDTO));
     }
 
     @PutMapping("/update/{id}")
     @ResponseBody
-    public BookResponseDTO updateBook(@PathVariable Long id,@RequestBody @Valid BookUpdateDTO updateDTO)
-    {
-        return bookService.updateBook(id, updateDTO);
+    public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @RequestBody @Valid BookUpdateDTO updateDTO) {
+        return ResponseEntity.ok(bookService.updateBook(id, updateDTO));
     }
 
     @DeleteMapping("/delete/{id}")
     @ResponseBody
-    public void deleteBook(@PathVariable Long id)
-    {
+    public ResponseEntity<String> deleteBook(@PathVariable Long id) {
         bookService.deleteBook(id);
+        return ResponseEntity.ok("Book deleted successfully");
     }
 
     @GetMapping("/search")
     @ResponseBody
-    public Page<BookResponseDTO> search(@RequestParam(defaultValue = "") String keyword,
-                                        @RequestParam(defaultValue = "0") int page,
-                                        @RequestParam(defaultValue = "5") int size)
-    {
-        return bookService.search(keyword, page, size);
+    public ResponseEntity<Page<BookResponseDTO>> search(@RequestParam(defaultValue = "") String keyword,
+                                                        @RequestParam(defaultValue = "0") int page,
+                                                        @RequestParam(defaultValue = "5") int size) {
+        return ResponseEntity.ok(bookService.search(keyword, page, size));
     }
 
     @GetMapping("/export")
     @ResponseBody
-    public void booksExcelExport(HttpServletResponse httpServletResponse) throws IOException {
+    public ResponseEntity<String> booksExcelExport(HttpServletResponse httpServletResponse) throws IOException {
         httpServletResponse.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
         String headerKey = "Content-Disposition";
@@ -134,6 +133,7 @@ public class BookController {
         httpServletResponse.setHeader(headerKey, headerValue);
 
         bookService.booksExcelExport(httpServletResponse);
+        return ResponseEntity.ok("Export successfully");
     }
 
     @PostMapping("/import")

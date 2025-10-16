@@ -5,6 +5,7 @@ import com.example.bookweb_management.dto.borrowrecorddto.BorrowRecordResponseDT
 import com.example.bookweb_management.dto.borrowrecorddto.BorrowRecordUpdateDTO;
 import com.example.bookweb_management.enums.BorrowStatus;
 import com.example.bookweb_management.service.BorrowRecordService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +22,14 @@ public class BorrowRecordController {
     private BorrowRecordService borrowRecordService;
 
     @PostMapping("/borrow")
-    public BorrowRecordResponseDTO borrowBook(@RequestBody BorrowRecordCreateDTO createDTO)
+    public BorrowRecordResponseDTO borrowBook(@RequestBody @Valid BorrowRecordCreateDTO createDTO)
     {
         return borrowRecordService.borrowBook(createDTO);
     }
 
     @PutMapping("/update/{id}")
     public BorrowRecordResponseDTO updateBorrow(@PathVariable Long id,
-                                                @RequestBody BorrowRecordUpdateDTO updateDTO)
+                                                @RequestBody @Valid BorrowRecordUpdateDTO updateDTO)
     {
         return borrowRecordService.updateBorrow(id, updateDTO);
     }
